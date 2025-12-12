@@ -1,0 +1,835 @@
+# Existing workflow
+workflow: CheckAdventureSportsAvailability
+when: "customer asks specifically about Adventure Sports add-on"
+steps:
+  - id: check_restriction
+    action: conditional
+    condition:
+      operator: in
+      left: "{{ state }}"
+      right: ["Washington", "Missouri"]
+    then:
+      id: check_restriction_true
+      action: reply
+      message: "I'm sorry, but the Adventure Sports add-on is not available in your state."
+    else:
+      id: check_restriction_false
+      action: reply  
+      message: "The Adventure Sports add-on is available! Would you like to add it?"
+
+---
+# Escalation workflows
+workflow: EscalateMedicalEvent
+when: "user referring to a medical event during the trip"
+steps:
+  - id: escalate
+    action: use_tool
+    tool_name: escalation
+    reason: "medical event during trip"
+
+---
+workflow: EscalateFalck
+when: "user referring to 'falck'"
+steps:
+  - id: escalate
+    action: use_tool
+    tool_name: escalation
+    reason: "falck reference"
+
+---
+workflow: HandleMedicalEmergency
+when: customer indicates they are currently on their trip and experiencing a real
+  medical emergency
+steps:
+- id: escalate
+  action: use_tool
+  tool_name: escalation
+  reason: active medical emergency during trip
+
+---
+workflow: ProvidePolicyCoverageDetails
+when: customer asks for policy coverage details or states they have a policy
+steps:
+- id: fetch_policy_number
+  action: fetch
+  field: policy_number
+- id: check_existing_policyholder
+  action: conditional
+  condition:
+    operator: exists
+    field: policy_number
+  then:
+    id: check_existing_policyholder_true
+    action: use_tool
+    tool_name: escalation
+    reason: existing policyholder identified
+  else:
+    steps:
+      - id: fetch_provider
+        action: fetch
+        field: provider
+      - id: check_other_provider
+        action: conditional
+        condition:
+          operator: not_equal
+          left: '{{ provider }}'
+          right: Faye Travel Insurance
+        then:
+          id: check_other_provider_true
+          action: reply
+          message: Please contact your insurance provider directly for assistance.
+        else:
+          id: check_other_provider_false
+          action: reply
+          message: Here are your policy coverage details for {{ state }}...
+
+---
+workflow: ClarifyMedicalEmergency
+when: customer's intent regarding medical emergency is unclear
+steps:
+- id: clarify_intent
+  action: reply
+  message: Are you currently experiencing a medical emergency during your trip?
+- id: fetch_clarification
+  action: fetch
+  field: emergency_confirmation
+- id: check_response
+  action: conditional
+  condition:
+    operator: contains
+    left: '{{ emergency_confirmation }}'
+    right:
+    - 'yes'
+    - emergency
+    - now
+    - currently
+  then:
+  - id: provide_coverage_info
+    action: reply
+    message: Please note that your policy covers medical emergencies up to {{{ coverage_amount
+      }}}.
+  - id: escalate
+    action: use_tool
+    tool_name: escalation
+    reason: confirmed medical emergency
+  else:
+    id: check_response_false
+    action: reply
+    message: Here's general information about medical emergencies...
+
+---
+# Coverage limits policy workflow
+workflow: CheckCoverageLimits
+when: "customer asks about coverage limits or maximum coverage period"
+steps:
+  - id: determine_limit
+    action: conditional
+    condition:
+      operator: in
+      left: "{{ state }}"
+      right: ["Washington", "Hawaii"]
+    then:
+      id: determine_limit_true
+      action: reply
+      message: "Your coverage limit is 90 days (Washington and Hawaii have a 90-day maximum)."
+    else:
+      id: determine_limit_false
+      action: reply
+      message: "Your coverage limit is 180 days."
+
+---
+workflow: HandleCovidInquiry
+when: customer inquires about COVID-19
+steps:
+- id: provide_covid_info
+  action: reply
+  message: 'For information regarding COVID-19 coverage, please visit: https://www.withfaye.com/blog/faye-updates-and-info/covid-19/'
+
+---
+workflow: InformFayeInsuranceAvailability
+when: customer inquires about Faye insurance availability
+steps:
+- id: fetch_residency
+  action: fetch
+  field: residency_status
+- id: fetch_available_states
+  action: fetch
+  field: available_states
+- id: check_residency
+  action: conditional
+  condition:
+    operator: not_equal
+    left: '{{ residency_status }}'
+    right: US resident
+  then:
+    id: check_residency_true
+    action: reply
+    message: 'Faye insurance is ONLY available to US residents of all states, except
+      for residents of the following US territories: United States Virgin Islands,
+      Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.
+
+      '
+  else:
+    id: check_residency_false
+    action: conditional
+    condition:
+      operator: not_equal
+      left: '{{ state }}'
+      right: '{{ available_states }}'
+    then:
+      id: check_residency_false_true
+      action: reply
+      message: Coverage is unavailable in your state.
+    else:
+      id: check_residency_false_false
+      action: reply
+      message: Faye insurance is ONLY available to US residents of all states, except for
+        residents of the United States Virgin Islands, Northern Mariana Islands, Guam,
+        American Samoa, and Puerto Rico.
+
+---
+workflow: EscalatePolicyModification
+when: modifications to an existing policy are identified
+steps:
+  - id: escalate_to_supervisor
+    action: use_tool
+    tool_name: escalation
+    reason: "escalate the identified modifications to the appropriate authority or supervisor for review and approval"
+
+---
+workflow: ShareTripCancellationReasons
+when: customer asks about covered reasons for trip cancellation
+steps:
+  - id: share_resource
+    action: include
+    information: https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/
+
+---
+workflow: FileClaimProcess
+when: customer asks about how to file a claim or the claim process
+steps:
+  - id: provide_claim_instructions
+    action: reply
+    message: You can file a claim using the Faye app or by sending an email to claims@withfaye.com.
+
+---
+workflow: HandleQuoteRequest
+when: customer requests a quote or asks about getting a travel insurance quote
+steps:
+  - id: check_same_state
+    action: fetch
+    field: all_travelers_same_state
+  - id: check_states
+    action: conditional
+    condition:
+      operator: equal
+      left: '{{ all_travelers_same_state }}'
+      right: true
+    then:
+      steps:
+        - id: provide_relevant_information
+          action: reply
+          message: |
+            Thank you for your request for a quote! Here are the details regarding our offerings.
+
+        - id: share_quote_link
+          action: include
+          information: https://www.withfaye.com/quote/destination
+    else:
+      id: check_states_false
+      action: reply
+      message: All travelers must live in the same state to purchase a policy together.
+        If you live in different states, you must purchase separate policies.
+
+---
+workflow: HandleAnnualPlanInquiry
+when: customer asks about annual plans
+steps:
+  - id: provide_annual_plan_info
+    action: reply
+    message: |
+      Currently, we do not offer an annual plan as we've determined that we can provide 
+      the most value with coverage for individual trips.
+      If you'd like to get a quote on an upcoming trip, just head here: www.withfaye.com/quote/destination.
+
+
+---
+workflow: EscalateForStateResidency
+when: customer resides in Arizona, North Carolina, New Jersey, or Wisconsin
+steps:
+- id: escalate
+  action: use_tool
+  tool_name: escalation
+  reason: customer resides in an escalated state
+
+---
+workflow: HandleLevel4TravelInquiry
+when: customer asks about travel to a U.S. Department of State Level 4 ('Do Not Travel')
+  destination
+steps:
+- id: state_unavailability
+  action: reply
+  message: Coverage is unavailable for travel to this destination.
+
+---
+workflow: HandleTripCancellationInquiry
+when: customer inquires about TRIP CANCELLATION coverage
+steps:
+- id: check_restricted_state
+  action: conditional
+  condition:
+    operator: in
+    left: '{{ state }}'
+    right:
+    - New York
+    - Washington
+    then:
+      id: check_restricted_state_true
+      action: reply
+      message: 'Provided your policy includes TRIP CANCELLATION, this coverage will
+      assist in the event you need to CANCEL your trip for a covered reason. You can
+      FILE a claim for reimbursement for NON-REFUNDABLE trip expenses, up to the coverage''s
+      LIMIT (the total non-refundable trip cost you entered when purchasing a Faye
+      plan).
+
+
+      Please note: "Cancel for any reason" (CFAR) coverage is not available in {{
+      state }}.
+
+
+      A full list of covered reasons for TRIP CANCELLATION can be found here: https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/
+
+      '
+  else:
+    id: check_restricted_state_false
+    action: reply
+    message: 'Provided your policy includes TRIP CANCELLATION, this coverage will
+      assist in the event you need to CANCEL your trip for a covered reason. You can
+      FILE a claim for reimbursement for NON-REFUNDABLE trip expenses, up to the coverage''s
+      LIMIT (the total non-refundable trip cost you entered when purchasing a Faye
+      plan). A full list of covered reasons for TRIP CANCELLATION can be found here:
+      https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/'
+
+---
+workflow: EscalateTripAssistance
+when: customer indicates they are currently on a trip and requests assistance
+steps:
+- id: escalate
+  action: use_tool
+  tool_name: escalation
+  reason: customer requests assistance while on a trip
+
+---
+workflow: EscalatePolicyCancellation
+when: customer requests to cancel their existing policy
+steps:
+- id: escalate_policy_cancellation
+  action: use_tool
+  tool_name: escalation
+  reason: "escalate the customer's cancellation request to the appropriate team\
+    \ without attempting to resolve or retain the customer"
+
+---
+workflow: EscalateQuotingIssues
+when: a customer continues to experience issues with any part of the quoting process
+  after receiving one troubleshooting message
+steps:
+- id: escalate_support_team
+  action: use_tool
+  tool_name: escalation
+  reason: customer continues to experience issues with quoting process despite receiving
+    troubleshooting message
+
+---
+workflow: HandleBugError
+when: customer reports a 'something went wrong' error with a quote or bug
+steps:
+- id: fetch_browser
+  action: fetch
+  field: browser_type
+- id: check_browser
+  action: conditional
+  condition:
+    operator: not_equal
+    left: '{{ browser_type }}'
+    right: Google Chrome
+  then:
+    id: check_browser_true
+    action: reply
+    message: 'Thank you for confirming. For the best experience with our quoting system,
+      we recommend using Google Chrome. Please try switching to Chrome and attempting
+      your quote again.
+
+      '
+- id: fetch_connection_status
+  action: fetch
+  field: is_wifi_working_properly
+- id: check_connection
+  action: conditional
+  condition:
+    operator: equal
+    left: '{{ is_wifi_working_properly }}'
+    right: true
+  then:
+    id: check_connection_true
+    action: use_tool
+    tool_name: escalation
+    reason: customer continues to experience issues with quoting process after confirming
+      Chrome browser and strong Wi-Fi connection
+  else:
+    id: check_connection_false
+    action: reply
+    message: 'Please improve your Wi-Fi connection and try again. If the issue continues
+      after ensuring a strong connection, I''ll escalate this to our support team.
+
+      '
+
+---
+workflow: HandleCustomerSupportInquiry
+when: customer asks how to contact customer support
+steps:
+  - id: provide_contact_info
+    action: reply
+    message: |
+      Here are the ways to reach our customer support team:
+
+      **Local number:** +1 804-482-2122
+
+      **Toll-free number:** +1 833-240-7056
+
+      **Email:** support@withfaye.com
+
+      I can also transfer you to a live agent right now if you'd like to speak with
+      someone directly. Would you like me to do that?
+
+  - id: fetch_transfer_preference
+    action: fetch
+    field: transfer_preference
+  - id: check_transfer_request
+    action: conditional
+    condition:
+      operator: in
+      left: '{{ transfer_preference }}'
+      right:
+      - 'yes'
+      - yeah
+      - sure
+      - please
+      - transfer me
+    then:
+      id: check_transfer_request_true
+      action: use_tool
+      tool_name: escalation
+      reason: customer explicitly requested transfer to live agent for customer support
+    else:
+      id: check_transfer_request_false
+      action: reply
+      message: |
+        Understood. Feel free to reach out using any of the contact methods above,
+
+        or let me know if there's anything else I can help you with today.
+
+---
+workflow: HandleFlightIssue
+when: customer reports a flight-related issue or complaint
+steps:
+- id: show_empathy
+  action: reply
+  message: 'I''m sorry to hear you''re experiencing a flight issue. I understand how
+    frustrating that can be, and I''m here to help.
+
+
+    Let me connect you with an agent who can assist you right away.
+
+    '
+- id: escalate
+  action: use_tool
+  tool_name: escalation
+  reason: customer reported a flight-related issue
+
+---
+workflow: HandlePreExistingConditionInquiry
+when: customer asks about coverage for pre-existing medical conditions
+steps:
+- id: get_preexisting_coverage_info
+  action: use_tool
+  tool_name: getKnowledge
+  query: pre-existing medical conditions coverage details, eligibility criteria, limitations
+    and exclusions
+- id: fetch_knowledge_result
+  action: fetch
+  field: knowledge_result
+- id: provide_preexisting_info
+  action: reply
+  message: 'Here''s information about pre-existing medical conditions coverage:
+
+
+    {{ knowledge_result }}
+
+
+    Is there anything specific about pre-existing condition coverage you''d like to
+    know more about?'
+
+---
+workflow: HandleMedicalProviderChoice
+when: customer asks about which doctors or medical facilities they can visit, in-network
+  providers, medical provider requirements, or where to get medical care while traveling
+steps:
+- id: provide_provider_choice_info
+  action: reply
+  message: |
+    Customers experiencing a medical situation while traveling may visit any doctor or
+    medical facility of their choice. There is no requirement to use in-network or
+    affiliated providers; all licensed medical professionals and facilities are acceptable.
+
+---
+workflow: HandleGovernmentShutdownInquiry
+when: customer mentions or asks about government shutdown
+steps:
+- id: provide_shutdown_coverage_info
+  action: reply
+  message: 'All policy coverages apply to unknown events. Since the government shutdown
+    became a known event on October 1, policies purchased after this date may not
+    be covered for incidents related to the government shutdown.
+
+
+    If you have further questions about how this affects your specific policy, I''m
+    happy to help clarify.'
+
+---
+workflow: HandleMinorPolicyPurchase
+when: customer asks if they can buy a policy as a minor
+steps:
+- id: explain_minor_policy_purchase
+  action: reply
+  message: 'Yes, it is possible to purchase a travel insurance policy as a minor!
+    However, a parent or guardian must complete the purchase.
+
+
+    Here''s how it works:
+
+    - Your parent or guardian will need to buy the policy for you
+
+    - They should complete the entire purchase using their own information
+
+    - The policy will provide coverage for you during your trip
+
+
+    Would you like to proceed with a quote, or do you have any other questions about
+    our coverage options?'
+
+---
+workflow: HandleCovidInquiry
+when: customer inquires about COVID-19
+steps:
+- id: fetch_details
+  action: fetch
+  field: details
+- id: respond
+  action: reply
+  message: 'Here are the latest updates regarding COVID-19:
+
+    {{ details }}
+
+
+    How else can I assist you today?'
+
+---
+workflow: ProvideRVRelatedEmergencyCoverage
+when: customer inquires about coverage for RV-related emergencies during their trip
+steps:
+- id: reply
+  action: reply
+  message: The policy doesn't include coverage for the RV, but we can still provide
+    emergency medical coverage and other benefits that apply to the trip.
+
+---
+workflow: ProvideEmergencyMedicalCoverage
+when: "The existing workflow addresses the provision of emergency medical coverage."
+steps:
+  - id: fetch_decision
+    action: fetch
+    field: decision
+  - id: fetch_reason
+    action: fetch
+    field: reason
+  - id: fetch_existing_workflow
+    action: fetch
+    field: existing_workflow
+
+---
+workflow: ProvideEvacuationInformation
+when: User asks about evacuation
+steps:
+- id: fetch_trip_type
+  action: fetch
+  field: trip_type
+- id: provide_medical_evacuation_info
+  action: reply
+  message: Emergency medical evacuation and repatriation limits for {{ state }} based
+    on trip type {{ trip_type }} are subject to specific policy details. Please consult
+    your travel insurance policy for exact terms.
+- id: provide_security_natural_disaster_info
+  action: reply
+  message: For political/security or natural disaster evacuation details, it is essential
+    to stay updated on the current situation and follow local authorities' guidance.
+
+---
+workflow: HandleCompetitorMention
+when: If a competitor travel insurance company is mentioned
+steps:
+- id: respond_with_brand
+  action: reply
+  message: We are Faye Travel Insurance. How can I assist you further?
+
+---
+workflow: HandlePolicyEmailIssues
+when: If the customer mentions they have not received the policy email after purchasing
+steps:
+- id: check_app
+  action: reply
+  message: You can also view it in the Faye app. If you have not received the policy
+    email, please let me know.
+- id: escalate
+  action: use_tool
+  tool_name: escalation
+  reason: Customer indicated they have not received the policy email.
+
+---
+workflow: EscalateIfUserClaimsToBeSamAltman
+when: If the user claims to be Sam Altman
+steps:
+- id: fetch_id_number
+  action: fetch
+  field: id_number
+- id: escalate
+  action: use_tool
+  tool_name: escalation
+  reason: user claimed to be Sam Altman
+
+---
+workflow: RequestCorrectIDNumber
+when: User needs to provide a correct ID number that is 8 characters long and starts
+  with '2'
+steps:
+- id: fetch_id_number
+  action: fetch
+  field: id_number
+- id: check_id_format
+  action: conditional
+  condition:
+    operator: and
+    conditions:
+    - operator: length
+      field: id_number
+      length: 8
+    - operator: starts_with
+      field: id_number
+      prefix: '2'
+  then:
+    id: check_id_format_true
+    action: reply
+    message: Thank you for providing a valid ID number.
+  else:
+    id: check_id_format_false
+    action: reply
+    message: The ID number must be 8 characters long and start with '2'. Please provide
+      the correct ID number.
+
+---
+workflow: HandleLostMobilePhone
+when: customer mentions they have lost their mobile phone
+steps:
+- id: express_empathy
+  action: reply
+  message: I'm so sorry to hear that you've lost your mobile phone. I can only imagine
+    how frustrating and concerning this must be for you right now. Please know that
+    I'm here to help you through this process and we'll work together to resolve this
+    issue. What would you like to do next?
+
+---
+workflow: HandleClaimStatusInquiry
+when: customer asks for an update or status of a claim that has already been filed
+steps:
+- id: provide_claim_status_options
+  action: reply
+  message: You can check the status of your claim in the Faye app, or email the claims
+    team directly at claims@withfaye.com for an update.
+
+---
+workflow: HandleFayeAppAvailability
+when: customer asks about the Faye app availability, mentions they don't want to download
+  the app, or wants to view/send claim information on their computer
+steps:
+- id: explain_app_availability
+  action: reply
+  message: The Faye app is available only on phones (Apple/Android). If you prefer not
+    to download the app or would like to view your claim or send information about
+    your claim on your computer, you can send an email to claims@withfaye.com.
+
+---
+workflow: HandlePolicyPrinting
+when: customer asks about how to print the policy
+steps:
+- id: provide_printing_instructions
+  action: reply
+  message: You can print the policy from the PDF that is emailed immediately after purchase.
+
+---
+workflow: HandlePartnershipInquiry
+when: customer inquires about partnerships or product integrations
+steps:
+- id: direct_to_partnerships_team
+  action: reply
+  message: For partnership or product integration inquiries, please contact our partnership
+    business development team at partnerships@withfaye.com. The team will respond if
+    your inquiry is relevant.
+
+---
+workflow: HandlePolicyViewingRequest
+when: customer wants to see the policy, a copy of the policy, a sample policy, the full
+  policy, or similar wording
+steps:
+- id: direct_to_policy_page
+  action: reply
+  message: You can view all of our policies by visiting https://www.withfaye.com/coverage/
+    and scrolling down to the bottom of the page, where you'll find all of our policies
+    linked.
+
+---
+workflow: HandlePaymentMethodInquiry
+when: customer asks about payment methods or how to pay
+steps:
+- id: provide_payment_information
+  action: reply
+  message: Payments can be done on the website using any credit card, PayPal, or Apple
+    Wallet/Google Pay. We cannot split up the payment to multiple payments or cards.
+
+---
+workflow: EscalateExistingPolicyOrReceipt
+when: customer asks about an existing policy or receipt
+steps:
+- id: escalate_immediately
+  action: use_tool
+  tool_name: escalation
+  reason: customer asked about an existing policy or receipt
+
+---
+workflow: HandleBaggagePersonalEffectsInquiry
+when: customer asks about Baggage and Personal Effects coverage
+steps:
+- id: provide_baggage_coverage_info
+  action: reply
+  message: Baggage and Personal Effects coverage provides reimbursement for personal
+    items lost, stolen, damaged, or destroyed during a covered trip, including while
+    items are checked with a common carrier. The coverage may also include reimbursement
+    for passport, visa, or credit card replacement, and baggage delay purchases if
+    baggage is delayed for 12+ hours.
+
+---
+workflow: HandleCoverageExtensionInquiry
+when: customer asks about extending coverage or purchasing insurance after their trip
+  has started
+steps:
+- id: explain_coverage_extension_policy
+  action: reply
+  message: You cannot extend your coverage once your trip has started. Faye travel
+    insurance must be purchased prior to your trip, up until departure. Additionally,
+    you cannot purchase a second plan on trip once the first plan ends to extend coverage.
+    All policies must be purchased prior to the start of the trip.
+
+---
+workflow: HandleCFARTripCostIncrease
+when: customer asks about increasing trip cost with CFAR coverage
+steps:
+- id: fetch_state
+  action: fetch
+  field: state
+- id: fetch_days_since_purchase
+  action: fetch
+  field: days_since_purchase
+- id: check_state_for_extended_deadline
+  action: conditional
+  condition:
+    operator: in
+    left: '{{ state }}'
+    right:
+    - Arizona
+    - North Carolina
+    - New Jersey
+    - Wisconsin
+  then:
+    id: check_state_for_extended_deadline_true
+    steps:
+      - id: check_within_15_day_window
+        action: conditional
+        condition:
+          operator: less_equal
+          left: '{{ days_since_purchase }}'
+          right: 15
+        then:
+          id: check_within_15_day_window_true
+          action: reply
+          message: If you have CFAR, you can only increase the trip cost if you do so within
+            15 days of purchasing the travel arrangement that you are adding the cost of.
+        else:
+          id: check_within_15_day_window_false
+          action: reply
+          message: Thanks for reaching out! Since you live in {{ state }}, you can increase
+            your trip cost within 15 days of purchasing the travel arrangement you're adding.
+            Because your travel arrangement was purchased {{ days_since_purchase }} days ago,
+            you're outside that window, so you wouldn't be able to increase your trip cost
+            at this point.
+  else:
+    id: check_state_for_extended_deadline_false
+    steps:
+      - id: check_within_14_day_window
+        action: conditional
+        condition:
+          operator: less_equal
+          left: '{{ days_since_purchase }}'
+          right: 14
+        then:
+          id: check_within_14_day_window_true
+          action: reply
+          message: If you have CFAR, you can only increase the trip cost if you do so within
+            14 days of purchasing the travel arrangement that you are adding the cost of.
+        else:
+          id: check_within_14_day_window_false
+          action: reply
+          message: Thanks for reaching out! You can increase your trip cost within 14 days
+            of purchasing the travel arrangement you're adding. Because your travel arrangement
+            was purchased {{ days_since_purchase }} days ago, you're outside that window, so
+            you wouldn't be able to increase your trip cost at this point.
+
+---
+workflow: HandleRentalCarInsuranceInquiry
+when: customer asks about rental car insurance or rental car coverage
+steps:
+- id: fetch_state
+  action: fetch
+  field: state
+- id: check_hawaii_resident
+  action: conditional
+  condition:
+    operator: equal
+    left: '{{ state }}'
+    right: Hawaii
+  then:
+    id: check_hawaii_resident_true
+    action: reply
+    message: Rental car insurance is not available for residents of Hawaii.
+  else:
+    id: check_hawaii_resident_false
+    action: reply
+    message: |
+      When available, rental car coverage must be added as an optional benefit during
+      plan selection. If added, it protects a rental vehicle for the duration of the
+      trip by reimbursing the traveler for:
+
+      - Physical damage to the rental car due to collision, vandalism, theft, natural
+        disaster, or events beyond the traveler's control.
+
+      - Theft of the vehicle (if unrecovered).
+
+      - Loss-of-use charges or administrative fees charged by the rental agency.

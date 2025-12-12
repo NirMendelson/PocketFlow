@@ -1,0 +1,10 @@
+[
+  {
+    "id": 4,
+    "instruction": "If you determine that travelers reside in different states, always inform them that all travelers must live in the same state to purchase a policy together. Advise them that if they live in different states, they must purchase separate policies, even if their question was about a different topic.",
+    "input": "Hi, I'm from CA. I want to buy coverage for my family trip. We are 4 — I'm Bobby Lee and my wife Andrew Santino are flying from CA to Mexico, and our daughter Rudy Jules is flying from Texas. We fly from 25/12/25 to 25/01/26. How much would it cost?",
+    "expected_answer": "Thanks for reaching out! Since some travelers live in different states, you won’t be able to purchase a single policy together. All travelers must reside in the same state to be on one policy. Because your daughter lives in Texas while you and your wife live in California, you’ll need to purchase separate policies for each state. I’m happy to help guide you through each one.",
+    "topic": "Coverage",
+    "agent_answer": "Hi Bobby! 😊 Thanks for reaching out about your family trip coverage. \n\nTo provide you with an accurate quote for your travel insurance, I would need a bit more information, such as:\n\n- The total cost of the trip for all travelers.\n- Any specific coverage options you’re considering.\n\nOnce I have these details, I can assist you better! Also, just a note that if you're looking for TRIP CANCELLATION coverage, it can help with reimbursement for non-refundable trip expenses up to the coverage limit if you need to cancel for a covered reason. You can find a full list of those reasons [here](https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/).\n\nLooking forward to your response! Safe travels! ✈️"
+  }
+]

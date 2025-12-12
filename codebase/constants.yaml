@@ -1,0 +1,8 @@
+default_reply_message: "I'm forwarding your request to a human agent"
+default_opening_line: ""
+default_closing_line: ""
+
+# Fields that are automatically fetched before any workflow runs
+# These don't need to be explicitly fetched in workflow steps
+default_prerequisites:
+  - state  # user's home state - always available

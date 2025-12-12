@@ -1,4 +1,23 @@
-import asyncio, warnings, copy, time
+import asyncio, warnings, copy, time, os
+
+def _is_debugging_enabled():
+    """Check if DEBUGGING_MODE is enabled from environment variables."""
+    return os.environ.get("DEBUGGING_MODE", "").lower() in ("true", "1", "yes")
+
+def _log_node_execution(node, shared, action_result=None):
+    """Log node execution details when debugging is enabled."""
+    if not _is_debugging_enabled():
+        return
+    
+    # Get node class name
+    node_name = node.__class__.__name__
+    
+    # Print what the node did (using print for reliable output)
+    print(f"[DEBUG] node '{node_name}' completed execution")
+    
+    # Print action result if available
+    if action_result is not None:
+        print(f"[DEBUG] node '{node_name}' returned action: {action_result}")
 
 class BaseNode:
     def __init__(self): self.params,self.successors={},{}
@@ -10,7 +29,10 @@ class BaseNode:
     def exec(self,prep_res): pass
     def post(self,shared,prep_res,exec_res): pass
     def _exec(self,prep_res): return self.exec(prep_res)
-    def _run(self,shared): p=self.prep(shared); e=self._exec(p); return self.post(shared,p,e)
+    def _run(self,shared): 
+        p=self.prep(shared); e=self._exec(p); action_result=self.post(shared,p,e)
+        _log_node_execution(self, shared, action_result)
+        return action_result
     def run(self,shared): 
         if self.successors: warnings.warn("Node won't run successors. Use Flow.")  
         return self._run(shared)
@@ -70,7 +92,10 @@ class AsyncNode(Node):
     async def run_async(self,shared): 
         if self.successors: warnings.warn("Node won't run successors. Use AsyncFlow.")  
         return await self._run_async(shared)
-    async def _run_async(self,shared): p=await self.prep_async(shared); e=await self._exec(p); return await self.post_async(shared,p,e)
+    async def _run_async(self,shared): 
+        p=await self.prep_async(shared); e=await self._exec(p); action_result=await self.post_async(shared,p,e)
+        _log_node_execution(self, shared, action_result)
+        return action_result
     def _run(self,shared): raise RuntimeError("Use run_async.")
 
 class AsyncBatchNode(AsyncNode,BatchNode):

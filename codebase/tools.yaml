@@ -1,0 +1,21 @@
+global_tools:
+  - tool: escalation
+    description: "sends the ticket to a human agent"
+    steps:
+      - id: fetch_email
+        action: fetch
+        field: email
+      - id: fetch_full_name
+        action: fetch
+        field: full_name
+    params:
+      - reason
+      - reply_message
+
+  - tool: getKnowledge
+    description: "retrieves relevant information from knowledge base when no workflow matches the customer question"
+    params:
+      - query
+
+custom_tools:
+  # Customer-specific tools will be added here
