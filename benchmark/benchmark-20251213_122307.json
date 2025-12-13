@@ -1,0 +1,10 @@
+[
+  {
+    "id": 18,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome. can you fix it?",
+    "expected_answer": "Thanks for the details and for confirming you’re using Chrome. Next, can you please check that you have a strong and stable Wi-Fi connection, and then try again?",
+    "topic": "Web Support",
+    "agent_answer": "Thank you for reaching out and letting us know about the issue. I'm sorry you're experiencing this problem. A 404 error usually means the page you're trying to access isn't available at the moment. Here’s what you can try to resolve the issue: \n\n- Ensure your Google Chrome is up to date.\n- Clear your browser cache and cookies, then try reloading the page.\n- Try accessing the website from a different device, if possible, to see if the issue persists.\n\nIf the problem continues, please let me know, and we can investigate further. Your patience is greatly appreciated!"
+  }
+]

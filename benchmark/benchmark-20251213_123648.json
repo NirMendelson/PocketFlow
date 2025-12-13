@@ -1,0 +1,10 @@
+[
+  {
+    "id": 20,
+    "instruction": "When customers inquire about partnerships or product integrations, direct them to the partnership business development team by providing the email address partnerships@withfaye.com. Inform them that the team will respond if the inquiry is relevant.",
+    "input": "Hi, I'm from CA. I run a travel booking platform and I’d like to explore integrating Faye into our product. Who should I talk to?",
+    "expected_answer": "Thanks for reaching out and for your interest in partnering with Faye. For partnership and product integration inquiries, please contact our partnership business development team at partnerships@withfaye.com. They review all inquiries and will get back to you if it’s relevant.",
+    "topic": "Web Support",
+    "agent_answer": "\"Are you interested in discussing insurance integration options or app functionalities?\""
+  }
+]

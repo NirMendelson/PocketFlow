@@ -1002,14 +1002,24 @@ examples:
   - "I'm missing my policy email"
 
 steps:
-- id: check_app
-  action: reply
-  message: You can also view it in the Faye app. If you have not received the policy
-    email, please let me know.
-- id: escalate
-  action: use_tool
-  tool_name: escalation
-  reason: Customer indicated they have not received the policy email.
+- id: fetch_app_check
+  action: fetch
+  field: app_checked
+- id: check_app_status
+  action: conditional
+  condition:
+    operator: equal
+    left: '{{ app_checked }}'
+    right: true
+  then:
+    id: escalate
+    action: use_tool
+    tool_name: escalation
+    reason: Customer indicated they have not received the policy email and has checked the app.
+  else:
+    id: tell_to_check_app
+    action: reply
+    message: You can also view it in the Faye app. If you have not received the policy email after checking the app, please let me know.
 
 ---
 workflow: EscalateIfUserClaimsToBeSamAltman
@@ -1170,6 +1180,8 @@ keywords:
   - partnership
   - product integration
   - business partnership
+  - integration
+  - product integration
 
 examples:
   - "I'm interested in a partnership"

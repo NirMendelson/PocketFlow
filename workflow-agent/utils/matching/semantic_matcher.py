@@ -9,7 +9,7 @@ from typing import List, Tuple, Dict
 # Matches queries against examples using semantic similarity
 class SemanticMatcher:
     # Initialize the semantic matcher
-    def __init__(self, examples: List[str], workflow_names: List[str], model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(self, examples: List[str], workflow_names: List[str], model_name: str = "all-mpnet-base-v2"):
         self.model = SentenceTransformer(model_name)
         self.examples = examples
         self.workflow_names = workflow_names
@@ -83,7 +83,7 @@ def extract_examples_from_workflows(workflows: Dict) -> Dict[str, List[str]]:
 
 
 # Create a semantic matcher from workflow examples
-def create_semantic_matcher(workflow_examples: Dict[str, List[str]]) -> SemanticMatcher:
+def create_semantic_matcher(workflow_examples: Dict[str, List[str]], model_name: str = "all-mpnet-base-v2") -> SemanticMatcher:
     examples = []
     workflow_names = []
     
@@ -92,7 +92,7 @@ def create_semantic_matcher(workflow_examples: Dict[str, List[str]]) -> Semantic
             examples.append(example)
             workflow_names.append(workflow_name)
     
-    return SemanticMatcher(examples, workflow_names)
+    return SemanticMatcher(examples, workflow_names, model_name=model_name)
 
 
 # Match user input against workflow examples using semantic similarity

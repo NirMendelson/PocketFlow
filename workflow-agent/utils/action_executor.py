@@ -106,7 +106,7 @@ def evaluate_condition(condition: Dict[str, Any], conversation_history: List[Dic
     right = condition.get('right', '')
     field = condition.get('field', '')
     
-    prompt = f"""Evaluate this condition based on the conversation and extracted fields.
+    prompt = f"""You are an intelligence agent. You have great capabilities to read between the lines and infer information. Evaluate this condition based on the conversation and extracted fields.
 
 Condition:
 - Operator: {operator}
@@ -119,6 +119,12 @@ Conversation:
 
 Extracted Fields:
 {fields_text}
+
+TASK: Determine if this condition is true or false based on the available data. Check both memory and conversation history - the user may have mentioned relevant information earlier in the conversation.
+
+CRITICAL: Use your intelligence to determine if the condition is true or false, don't do a simple string comparison.
+- California = CA is true
+- yes = yeah = I think so = any other phrase with basic meaning of yes
 
 Evaluate the condition and return ONLY "true" or "false" (lowercase, no quotes, no explanation)."""
 
