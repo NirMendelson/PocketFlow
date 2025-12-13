@@ -77,18 +77,6 @@ def combine_matching_results_with_debug(
     semantic_matches: List[Tuple[str, float]],
     min_combined_score: float = 0.3
 ) -> Tuple[List[Tuple[str, float]], Dict[str, Dict[str, any]]]:
-    """
-    Combine keyword and semantic matching results with detailed debug information.
-    
-    Returns:
-        Tuple of (filtered_results, debug_info)
-        - filtered_results: List of (workflow_name, combined_score) tuples
-        - debug_info: Dict mapping workflow_name to debug details with keys:
-            - keyword_match: bool
-            - semantic_score: Optional[float]
-            - combined_score: float
-            - explanation: str
-    """
     keyword_set = set(keyword_matches)
     
     # Create a dict mapping workflow names to semantic scores

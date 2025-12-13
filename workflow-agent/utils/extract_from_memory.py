@@ -1,7 +1,24 @@
 # Utility functions for extracting data from shared store/memory
 
 from typing import Dict, Any, List, Optional
-from utils.workflow_context import get_workflow_context
+
+
+def get_workflow_context(shared: Dict[str, Any]) -> Dict[str, Any]:
+    selected_workflow = shared.get("selected_workflow")
+    current_step = shared.get("current_step", {})
+    conversation_history = shared.get("conversation_history", [])
+    constants = shared.get("constants", {})
+    tone_config = shared.get("tone_config", {})
+    extracted_fields = shared.get("extracted_fields", {})
+    
+    return {
+        "selected_workflow": selected_workflow,
+        "current_step": current_step,
+        "conversation_history": conversation_history,
+        "constants": constants,
+        "tone_config": tone_config,
+        "extracted_fields": extracted_fields
+    }
 
 
 def extract_user_input(shared: Dict[str, Any]) -> str:

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import litellm
 
 
-def call_llm(prompt: str, model: str | None = None) -> str:
+def call_litellm(prompt: str, model: str | None = None) -> str:
     """
     Call LLM with a prompt and return the response.
     
@@ -75,4 +75,5 @@ def call_llm(prompt: str, model: str | None = None) -> str:
 if __name__ == "__main__":
     prompt = "Say hello in one word."
     print(f"prompt: {prompt}")
-    print(f"response: {call_llm(prompt)}")
+    print(f"response: {call_litellm(prompt)}")
+

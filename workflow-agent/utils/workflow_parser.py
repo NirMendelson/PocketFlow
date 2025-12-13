@@ -1,19 +1,8 @@
-"""Utility functions for parsing YAML workflow files."""
-
 import yaml
 from typing import Dict, List, Any
 
 
 def load_workflows(path: str) -> Dict[str, Dict[str, Any]]:
-    """
-    Load and parse workflow.yaml file.
-    
-    Args:
-        path: Path to workflow.yaml file
-    
-    Returns:
-        Dictionary mapping workflow names to their definitions
-    """
     with open(path, 'r', encoding='utf-8') as f:
         content = f.read()
     
@@ -46,29 +35,11 @@ def load_workflows(path: str) -> Dict[str, Dict[str, Any]]:
 
 
 def load_constants(path: str) -> Dict[str, Any]:
-    """
-    Load and parse constants.yaml file.
-    
-    Args:
-        path: Path to constants.yaml file
-    
-    Returns:
-        Dictionary with constants configuration
-    """
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f) or {}
 
 
 def load_tools(path: str) -> Dict[str, Any]:
-    """
-    Load and parse tools.yaml file.
-    
-    Args:
-        path: Path to tools.yaml file
-    
-    Returns:
-        Dictionary with tools configuration
-    """
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f) or {}
 

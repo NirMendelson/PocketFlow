@@ -1,5 +1,3 @@
-"""Fuzzy matching utilities for keyword-based workflow filtering."""
-
 from typing import Dict, List
 from rapidfuzz import fuzz, process
 

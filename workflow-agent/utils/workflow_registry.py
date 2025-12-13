@@ -1,25 +1,10 @@
-"""Utility functions for building step registries from workflow definitions."""
-
 from typing import Dict, List, Any, Optional, Tuple
 
 
 def build_step_registry(steps: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
-    """
-    Build a flat registry mapping step IDs to step definitions.
-    
-    Recursively traverses the workflow structure including nested steps
-    in conditional branches.
-    
-    Args:
-        steps: List of step definitions from workflow
-        
-    Returns:
-        Dictionary mapping step_id to step definition
-    """
     registry = {}
     
     def _process_step(step: Dict[str, Any], parent_id: Optional[str] = None):
-        """Recursively process a step and its branches."""
         step_id = step.get("id")
         if not step_id:
             return
@@ -70,21 +55,9 @@ def get_next_step_id(
     steps: List[Dict[str, Any]],
     condition_result: Optional[bool] = None
 ) -> Optional[str]:
-    """
-    Determine the next step ID after executing the current step.
-    
-    Args:
-        current_step_id: ID of the step that was just executed
-        steps: Original list of top-level steps
-        condition_result: Result of condition evaluation (for conditional steps)
-        
-    Returns:
-        Next step ID, or None if workflow is complete
-    """
     def _find_step_and_get_next(step_id: str, step_list: List[Dict[str, Any]], 
                                  top_level_steps: List[Dict[str, Any]],
                                  conditional_step_idx: Optional[int] = None) -> Optional[str]:
-        """Recursively find step and determine next step."""
         for idx, step in enumerate(step_list):
             step_step_id = step.get("id")
             
@@ -170,7 +143,6 @@ def get_next_step_id(
 
 
 def get_first_step_id(steps: List[Dict[str, Any]]) -> Optional[str]:
-    """Get the ID of the first step in the workflow."""
     if not steps:
         return None
     return steps[0].get("id")

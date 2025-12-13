@@ -268,9 +268,6 @@ steps:
 - id: fetch_residency
   action: fetch
   field: residency_status
-- id: fetch_available_states
-  action: fetch
-  field: available_states
 - id: check_residency
   action: conditional
   condition:
@@ -287,21 +284,10 @@ steps:
       '
   else:
     id: check_residency_false
-    action: conditional
-    condition:
-      operator: not_equal
-      left: '{{ state }}'
-      right: '{{ available_states }}'
-    then:
-      id: check_residency_false_true
-      action: reply
-      message: Coverage is unavailable in your state.
-    else:
-      id: check_residency_false_false
-      action: reply
-      message: Faye insurance is ONLY available to US residents of all states, except for
-        residents of the United States Virgin Islands, Northern Mariana Islands, Guam,
-        American Samoa, and Puerto Rico.
+    action: reply
+    message: Faye insurance is ONLY available to US residents of all states, except for
+      residents of the United States Virgin Islands, Northern Mariana Islands, Guam,
+      American Samoa, and Puerto Rico.
 
 ---
 workflow: EscalatePolicyModification

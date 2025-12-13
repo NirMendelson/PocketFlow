@@ -1,58 +1,102 @@
 [
     {
-      "id": 12,
-      "instruction": "ALWAYS share the link https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/ when discussing covered reasons for trip cancellation with customers.",
-      "input": "Hi, I'm from GA. I'm thinking of canceling my upcoming trip because of a family emergency. What are the covered reasons for trip cancellation?",
-      "expected_answer": "I’m sorry to hear you're dealing with a family emergency. You can review all covered reasons for trip cancellation here: https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/. This page explains when you may be eligible for reimbursement.",
-      "topic": "Claims"
-    },           
+      "id": 1,
+      "instruction": "If a customer inquires about purchasing insurance and states they are not a US resident, do not ask which US state they will visit. Instead, inform them that Faye insurance is only available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+      "input": "Hi, I need help purchasing travel insurance. I’m not a US resident, I’m from Queensland. Can I buy Faye insurance for my trip?",
+      "expected_answer": "Thanks for reaching out! Faye insurance is only available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+      "topic": "Coverage",
+      "agent_answer": "Could you please let me know which states or regions you're interested in for travel insurance coverage?",
+      "passed": false,
+      "reason": "The agent did not follow the instruction correctly. Instead of informing the customer that Faye insurance is only available to US residents and listing the excluded territories, the agent asked for details regarding the states or regions of interest for travel insurance coverage, which is contrary to the directive given. This output does not convey the core logic or information required in the instructions."
+    },
     {
-      "id": 14,
-      "instruction": "When customers reach out asking Faye's contact information.\n\nCustomers can always chat with us in the Faye app, email us at support@withfaye.com or call us at 1-833-240-7056 (US/Canada). From all other locations, call us at 1-804-482-2122. We're available 24/7.",
-      "input": "Hi, I'm from CO. Can you give me Faye’s contact information?",
-      "expected_answer": "Of course! You can always chat with us directly in the Faye app, email us at support@withfaye.com, or call us at 1-833-240-7056 from the US or Canada. If you're traveling internationally, you can reach us at 1-804-482-2122. We're available 24/7 and here to help.",
-      "topic": "Contact details"
+      "id": 4,
+      "instruction": "If you determine that travelers reside in different states, always inform them that all travelers must live in the same state to purchase a policy together. Advise them that if they live in different states, they must purchase separate policies, even if their question was about a different topic.",
+      "input": "Hi, I'm from CA. I want to buy coverage for my family trip. We are 4 — I'm Bobby Lee and my wife Andrew Santino are flying from CA to Mexico, and our daughter Rudy Jules is flying from Texas. We fly from 25/12/25 to 25/01/26. How much would it cost?",
+      "expected_answer": "Thanks for reaching out! Since some travelers live in different states, you won’t be able to purchase a single policy together. All travelers must reside in the same state to be on one policy. Because your daughter lives in Texas while you and your wife live in California, you’ll need to purchase separate policies for each state. I’m happy to help guide you through each one.",
+      "topic": "Coverage",
+      "agent_answer": "Could you please provide your all_travelers_same_state?",
+      "passed": false,
+      "reason": "The agent did not follow the instruction to inform the travelers about the requirement that all must reside in the same state to purchase a policy together. Instead, the agent asked for information without providing the necessary guidance about the state residency requirement or the need to purchase separate policies. This fails to convey the core logic and information expected in the response."
+    },
+    {
+      "id": 13,
+      "instruction": "The policy is emailed to the customer immediately upon purchasing. They can also view the policy in the Faye app. If this is mentioned to them and they say they have not received this, escalate.",
+      "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy in the app or by email. What do I do?",
+      "expected_answer": "Thanks for letting me know. Since the policy is emailed immediately after purchase and should also appear in the app, and you haven’t received it in either place, I’ll escalate this right away so the team can look into it for you.",
+      "topic": "Email Issues",
+      "agent_answer": "Hi there! 😊 It's great to hear from you. You can also view your policy in the Faye app. If you haven’t received the policy email yet, please let me know, and I’ll be happy to assist you further. Thank you for your patience!",
+      "passed": false,
+      "reason": "The agent did not mention escalating the issue. While the agent provided information about viewing the policy in the app and offered further assistance, they failed to indicate that they would escalate the matter since the customer has not received the policy email. This is a critical step missing from the response."
     },
     {
       "id": 17,
       "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
       "input": "Hi Im from AL there is a bug in the website I get a 404. can you fix it?",
       "expected_answer": "Thanks for letting me know about the issue. First, can you please confirm that you’re using the Google Chrome browser to access the website?",
-      "topic": "Web Support"
+      "topic": "Web Support",
+      "agent_answer": "Can you please let me know what browser you're using to access the website?",
+      "passed": false,
+      "reason": "The agent did not follow the instruction properly as they did not specify that the user should confirm they are using the Google Chrome browser. Instead, they asked what browser the user is using, which is not a direct confirmation request. Additionally, the agent output does not address later steps or mention escalating the issue if the error continues after checks, which is a critical part of the provided instructions."
     },
     {
       "id": 18,
       "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
       "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome. can you fix it?",
       "expected_answer": "Thanks for the details and for confirming you’re using Chrome. Next, can you please check that you have a strong and stable Wi-Fi connection, and then try again?",
-      "topic": "Web Support"
+      "topic": "Web Support",
+      "agent_answer": "Thank you for reaching out! I'm sorry to hear you're experiencing a 404 error. For the best experience with our quoting system, we recommend using Google Chrome. Could you please try switching to Chrome and attempting your quote again? If the issue persists, let me know and I'll be here to help! 😊",
+      "passed": false,
+      "reason": "The agent did not confirm that the user is using Google Chrome first, which is the initial step in the instructions. Instead, they focused on a 404 error without ensuring the browser being used. Additionally, the agent failed to mention checking the Wi-Fi connection. Most critically, the agent did not indicate they would escalate the issue if it persisted, which is a necessary step outlined in the instructions. Therefore, the core logic and requirements were not fully followed."
+    },
+    {
+      "id": 19,
+      "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+      "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome and my wifi works great on other sites. can you fix it?",
+      "expected_answer": "Thanks for confirming you’re using Chrome and that your Wi-Fi connection is working well. Since the issue is still happening after those checks, I’ll escalate this case to a support agent so they can investigate and help resolve it.",
+      "topic": "Web Support",
+      "agent_answer": "Thank you for reaching out! I'm sorry to hear you're experiencing a 404 error on our website. For the best experience with our quoting system, we recommend using Google Chrome. Please try switching to Chrome and attempting your quote again. If the issue persists, let me know, and I'll be happy to assist further! 😊",
+      "passed": false,
+      "reason": "The agent did not confirm whether the user was using the Google Chrome browser or if they had a strong Wi-Fi connection. Moreover, the agent did not escalate the issue to a support agent despite the user experiencing a 404 error. The instructions clearly require confirming those two critical details and escalating the case if the issue persists, which the agent failed to do."
     },
     {
       "id": 20,
       "instruction": "When customers inquire about partnerships or product integrations, direct them to the partnership business development team by providing the email address partnerships@withfaye.com. Inform them that the team will respond if the inquiry is relevant.",
       "input": "Hi, I'm from CA. I run a travel booking platform and I’d like to explore integrating Faye into our product. Who should I talk to?",
       "expected_answer": "Thanks for reaching out and for your interest in partnering with Faye. For partnership and product integration inquiries, please contact our partnership business development team at partnerships@withfaye.com. They review all inquiries and will get back to you if it’s relevant.",
-      "topic": "Web Support"
+      "topic": "Web Support",
+      "agent_answer": "Can you please share your residency status with me? It will help us understand your needs better!",
+      "passed": false,
+      "reason": "The agent's response did not address the customer's inquiry about partnerships or product integrations. Instead, it asked for residency status, which is irrelevant to the request. The expected answer provided a clear direction to the appropriate team and included their contact information, while the agent's output did not include any of that key information."
     },
     {
       "id": 23,
       "instruction": "If a customer asks about an existing policy or receipt, escalate the inquiry immediately without asking any follow-up questions.",
       "input": "Hi I'm from UT, I have policy number 43198791 and I think I got charged more than I should. Please tell me what went wrong.",
       "expected_answer": "Thanks for reaching out. Since this involves an existing policy and billing, I’ll escalate your inquiry right away so the appropriate team can review it for you.",
-      "topic": "Customer Purchases"
+      "topic": "Customer Purchases",
+      "agent_answer": "Hi there! 😊 I understand your concern about the charges related to your policy number 43198791. To get a clear picture of what might have gone wrong, I recommend checking your policy details and billing information in the Faye app. \n\nIf you haven't received the policy email, please let me know, and I can assist you further!",
+      "passed": false,
+      "reason": "The agent did not follow the instruction to escalate the inquiry immediately regarding the existing policy and billing. Instead of escalating the issue, the agent recommended checking the policy details and offered to assist further, which deviates from the required action of escalation without any follow-up questions. Therefore, the core logic of escalating the inquiry was not conveyed."
     },
     {
       "id": 28,
       "instruction": "If you have CFAR, you can only increase the trip cost if you do so within 14 days of purchasing the travel arrangement that you are adding the cost of (or 15 days if you live in AZ, NC, NJ, WI).",
       "input": "Hi, I'm from NJ. I bought my flights three weeks ago and I have CFAR. Can I increase my trip cost to include a new hotel I booked?",
       "expected_answer": "Thanks for reaching out! Since you live in NJ, you can increase your trip cost within 15 days of purchasing the travel arrangement you're adding. Because your flights were purchased three weeks ago, you’re outside that window, so you wouldn’t be able to increase your trip cost at this point.",
-      "topic": "Policy Changes"
+      "topic": "Policy Changes",
+      "agent_answer": "Could you please tell me what state you're in?",
+      "passed": false,
+      "reason": "The agent did not provide a relevant answer regarding the user's ability to increase trip cost based on the instructions given. Instead, it asked for the user's state, which does not address the core logic of whether they can increase the trip cost. The expected answer explicitly confirms the state (NJ) and explains the time limitation based on that information, which was not addressed by the agent."
     },
     {
       "id": 29,
       "instruction": "Rental car insurance is not available for residents of Hawaii. When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for: physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler’s control; theft of the vehicle (if unrecovered); loss-of-use charges or administrative fees charged by the rental agency.",
       "input": "Hi, I'm from HI and I'm renting a car in Japan. How much does rental car insurance cost if I add it?",
       "expected_answer": "Thanks for reaching out! Rental car insurance is not available for residents of Hawaii, so it can’t be added to your policy.",
-      "topic": "Rental car"
+      "topic": "Rental car",
+      "agent_answer": "Hello! 🌟 It's great to hear you're planning a trip to Japan!\n\nWhen it comes to rental car coverage, it's important to note that this must typically be added as an optional benefit during your plan selection. The cost can vary based on your specific plan and provider. \n\nIf you do choose to add it, this coverage generally protects the rental vehicle for the duration of your trip by reimbursing you for:\n\n- Physical damage to the rental car due to collision, vandalism, theft, natural disasters, or events beyond your control.\n- Theft of the vehicle (if it remains unrecovered).\n- Loss-of-use charges or administrative fees charged by the rental agency.\n\nI recommend checking with your specific rental car provider for the exact cost and details. If you have any more questions or need assistance with anything else, feel free to ask! Safe travels! ✈️",
+      "passed": false,
+      "reason": "The agent's output does not address the critical point that rental car insurance is not available for residents of Hawaii. Instead, it provides general information about rental car coverage without mentioning the restriction for Hawaii residents, which is a key aspect of the instructions."
     }
-]
+  ]

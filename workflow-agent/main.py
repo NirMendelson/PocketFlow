@@ -1,5 +1,3 @@
-"""Main entry point for workflow agent."""
-
 import os
 # Set TOKENIZERS_PARALLELISM before any tokenizer imports to suppress warnings
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -20,7 +18,6 @@ from flow import create_workflow_flow
 
 
 def main():
-    """Main function to process benchmark entries."""
     # Load YAML files
     base_path = "../codebase"
     workflows = load_workflows(f"{base_path}/workflow.yaml")

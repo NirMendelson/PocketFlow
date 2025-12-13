@@ -6,7 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from typing import List, Dict, Any, Tuple, Optional
 import yaml
-from utils.call_llm import call_llm
+from utils.litellm_configuration import call_litellm
 from utils.matching.workflow_filter import (
     filter_workflows_by_keywords,
     filter_workflows_by_examples,
@@ -25,24 +25,6 @@ def match_workflows(
     min_combined_score: float = 0.5,
     debug: bool = False
 ) -> Tuple[List[Tuple[str, float]], List[Tuple[str, float]], Optional[Dict[str, Dict[str, Any]]]]:
-    """
-    Match workflows using keyword and semantic matching.
-    
-    Args:
-        user_input: The user's input text
-        workflows: Dictionary of workflow definitions
-        fuzzy_threshold: Threshold for fuzzy keyword matching
-        semantic_k: Number of top semantic matches to return
-        semantic_min_score: Minimum semantic similarity score
-        min_combined_score: Minimum combined score threshold
-        debug: If True, return debug information
-    
-    Returns:
-        Tuple of (filtered_results, all_combined_results, debug_info)
-        - filtered_results: workflows that meet the min_combined_score threshold
-        - all_combined_results: all workflows with combined scores (sorted, may be below threshold)
-        - debug_info: Dictionary with detailed scoring breakdown (None if debug=False)
-    """
     # Step 1: Keyword fuzzy matching
     keyword_matches = filter_workflows_by_keywords(
         user_input,
@@ -156,7 +138,7 @@ Return your response in YAML format with confidence scores for each workflow:
 
 Score all workflows, even if some have low confidence."""
 
-    response = call_llm(prompt).strip()
+    response = call_litellm(prompt).strip()
     scores = _parse_confidence_scores_yaml(response, workflow_names)
     
     # If parsing failed, return default scores
@@ -218,7 +200,7 @@ Generate a single, concise clarification question that helps identify which work
 
 Return ONLY the clarification question, nothing else."""
 
-    response = call_llm(prompt).strip()
+    response = call_litellm(prompt).strip()
     return response
 
 
@@ -230,16 +212,6 @@ def print_matching_debug(
     debug_info: Dict[str, Dict[str, Any]],
     all_workflows: Dict[str, Dict[str, Any]]
 ) -> None:
-    """
-    Print detailed debugging information about workflow matching.
-    
-    Args:
-        user_input: The user's input text
-        keyword_matches: List of workflow names that matched keywords
-        semantic_matches: List of (workflow_name, score) tuples from semantic matching
-        debug_info: Debug information from combine_matching_results_with_debug
-        all_workflows: All workflow definitions (to show keywords/examples)
-    """
     print("\n" + "="*80)
     print("WORKFLOW MATCHING DEBUG")
     print("="*80)

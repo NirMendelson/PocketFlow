@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from pocketflow import Node
-from utils.workflow_context import get_workflow_context
+from utils.extract_from_memory import get_workflow_context
 from utils.workflow_executor import execute_workflow_step
 
 
