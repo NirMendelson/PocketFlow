@@ -114,10 +114,8 @@ examples:
 
 steps:
 - id: fetch_policy_number
-  action: fetch
+  action: fetch_with_condition
   field: policy_number
-- id: check_existing_policyholder
-  action: conditional
   condition:
     operator: exists
     field: policy_number
@@ -129,10 +127,8 @@ steps:
   else:
     steps:
       - id: fetch_provider
-        action: fetch
+        action: fetch_with_condition
         field: provider
-      - id: check_other_provider
-        action: conditional
         condition:
           operator: not_equal
           left: '{{ provider }}'
@@ -166,10 +162,8 @@ steps:
   action: reply
   message: Are you currently experiencing a medical emergency during your trip?
 - id: fetch_clarification
-  action: fetch
+  action: fetch_with_condition
   field: emergency_confirmation
-- id: check_response
-  action: conditional
   condition:
     operator: contains
     left: '{{ emergency_confirmation }}'
@@ -179,14 +173,15 @@ steps:
     - now
     - currently
   then:
-  - id: provide_coverage_info
-    action: reply
-    message: Please note that your policy covers medical emergencies up to {{{ coverage_amount
-      }}}.
-  - id: escalate
-    action: use_tool
-    tool_name: escalation
-    reason: confirmed medical emergency
+    steps:
+      - id: provide_coverage_info
+        action: reply
+        message: Please note that your policy covers medical emergencies up to {{{ coverage_amount
+          }}}.
+      - id: escalate
+        action: use_tool
+        tool_name: escalation
+        reason: confirmed medical emergency
   else:
     id: check_response_false
     action: reply
@@ -266,10 +261,8 @@ examples:
 
 steps:
 - id: fetch_residency
-  action: fetch
+  action: fetch_with_condition
   field: residency_status
-- id: check_residency
-  action: conditional
   condition:
     operator: not_equal
     left: '{{ residency_status }}'
@@ -372,10 +365,8 @@ examples:
 
 steps:
   - id: check_same_state
-    action: fetch
+    action: fetch_with_condition
     field: all_travelers_same_state
-  - id: check_states
-    action: conditional
     condition:
       operator: equal
       left: '{{ all_travelers_same_state }}'
@@ -605,42 +596,40 @@ examples:
 
 steps:
 - id: fetch_browser
-  action: fetch
+  action: fetch_with_condition
   field: browser_type
-- id: check_browser
-  action: conditional
   condition:
-    operator: not_equal
+    operator: equal
     left: '{{ browser_type }}'
     right: Google Chrome
   then:
-    id: check_browser_true
+    steps:
+      - id: fetch_connection_status
+        action: fetch_with_condition
+        field: is_wifi_working_properly
+        condition:
+          operator: equal
+          left: '{{ is_wifi_working_properly }}'
+          right: true
+        then:
+          id: check_connection_true
+          action: use_tool
+          tool_name: escalation
+          reason: customer continues to experience issues with quoting process after confirming
+            Chrome browser and strong Wi-Fi connection
+        else:
+          id: check_connection_false
+          action: reply
+          message: 'Please improve your Wi-Fi connection and try again. If the issue continues
+            after ensuring a strong connection, I''ll escalate this to our support team.
+
+            '
+  else:
+    id: check_browser_false
     action: reply
     message: 'Thank you for confirming. For the best experience with our quoting system,
       we recommend using Google Chrome. Please try switching to Chrome and attempting
       your quote again.
-
-      '
-- id: fetch_connection_status
-  action: fetch
-  field: is_wifi_working_properly
-- id: check_connection
-  action: conditional
-  condition:
-    operator: equal
-    left: '{{ is_wifi_working_properly }}'
-    right: true
-  then:
-    id: check_connection_true
-    action: use_tool
-    tool_name: escalation
-    reason: customer continues to experience issues with quoting process after confirming
-      Chrome browser and strong Wi-Fi connection
-  else:
-    id: check_connection_false
-    action: reply
-    message: 'Please improve your Wi-Fi connection and try again. If the issue continues
-      after ensuring a strong connection, I''ll escalate this to our support team.
 
       '
 
@@ -678,10 +667,8 @@ steps:
       someone directly. Would you like me to do that?
 
   - id: fetch_transfer_preference
-    action: fetch
+    action: fetch_with_condition
     field: transfer_preference
-  - id: check_transfer_request
-    action: conditional
     condition:
       operator: in
       left: '{{ transfer_preference }}'
@@ -1003,10 +990,8 @@ examples:
 
 steps:
 - id: fetch_app_check
-  action: fetch
+  action: fetch_with_condition
   field: did_user_tried_to_check_app
-- id: check_app_status
-  action: conditional
   condition:
     operator: equal
     left: '{{ did_user_tried_to_check_app }}'
@@ -1059,10 +1044,8 @@ examples:
 
 steps:
 - id: fetch_id_number
-  action: fetch
+  action: fetch_with_condition
   field: id_number
-- id: check_id_format
-  action: conditional
   condition:
     operator: and
     conditions:
@@ -1333,14 +1316,12 @@ examples:
   - "Can I update my trip cost?"
 
 steps:
-- id: fetch_state
-  action: fetch
-  field: state
 - id: fetch_days_since_purchase
   action: fetch
   field: days_since_purchase
-- id: check_state_for_extended_deadline
-  action: conditional
+- id: fetch_state
+  action: fetch_with_condition
+  field: state
   condition:
     operator: in
     left: '{{ state }}'
@@ -1411,10 +1392,8 @@ examples:
 
 steps:
 - id: fetch_state
-  action: fetch
+  action: fetch_with_condition
   field: state
-- id: check_hawaii_resident
-  action: conditional
   condition:
     operator: equal
     left: '{{ state }}'

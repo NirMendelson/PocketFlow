@@ -12,12 +12,16 @@ def build_step_registry(steps: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]
         # Store the step in registry
         registry[step_id] = step.copy()
         
-        # Process conditional branches
-        if step.get("action") == "conditional":
+        # Process conditional branches (for both "conditional" and "fetch_with_condition" actions)
+        if step.get("action") == "conditional" or step.get("action") == "fetch_with_condition":
             # Process then branch
             then_branch = step.get("then")
             if then_branch:
-                if isinstance(then_branch, list):
+                # Handle then branch with steps array (for fetch_with_condition)
+                if isinstance(then_branch, dict) and "steps" in then_branch:
+                    for branch_step in then_branch["steps"]:
+                        _process_step(branch_step, step_id)
+                elif isinstance(then_branch, list):
                     # Multiple steps in then branch
                     for branch_step in then_branch:
                         _process_step(branch_step, step_id)
@@ -29,7 +33,11 @@ def build_step_registry(steps: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]
             # Process else branch
             else_branch = step.get("else")
             if else_branch:
-                if isinstance(else_branch, list):
+                # Handle else branch with steps array (for fetch_with_condition)
+                if isinstance(else_branch, dict) and "steps" in else_branch:
+                    for branch_step in else_branch["steps"]:
+                        _process_step(branch_step, step_id)
+                elif isinstance(else_branch, list):
                     # Multiple steps in else branch
                     for branch_step in else_branch:
                         _process_step(branch_step, step_id)
@@ -116,22 +124,36 @@ def get_next_step_id(
         
         return None
     
-    # For conditional steps, return first step in the selected branch
+    # For conditional steps and fetch_with_condition steps, return first step in the selected branch
     for idx, step in enumerate(steps):
-        if step.get("id") == current_step_id and step.get("action") == "conditional":
+        if step.get("id") == current_step_id and (step.get("action") == "conditional" or step.get("action") == "fetch_with_condition"):
             if condition_result is True:
                 then_branch = step.get("then")
                 if then_branch:
-                    if isinstance(then_branch, list) and len(then_branch) > 0:
+                    # Handle then branch with steps array
+                    if isinstance(then_branch, dict) and "steps" in then_branch:
+                        steps_list = then_branch.get("steps", [])
+                        if len(steps_list) > 0:
+                            return steps_list[0].get("id")
+                    # Handle then branch as list
+                    elif isinstance(then_branch, list) and len(then_branch) > 0:
                         return then_branch[0].get("id")
-                    elif then_branch.get("id"):
+                    # Handle then branch as single step
+                    elif isinstance(then_branch, dict) and then_branch.get("id"):
                         return then_branch.get("id")
             else:
                 else_branch = step.get("else")
                 if else_branch:
-                    if isinstance(else_branch, list) and len(else_branch) > 0:
+                    # Handle else branch with steps array
+                    if isinstance(else_branch, dict) and "steps" in else_branch:
+                        steps_list = else_branch.get("steps", [])
+                        if len(steps_list) > 0:
+                            return steps_list[0].get("id")
+                    # Handle else branch as list
+                    elif isinstance(else_branch, list) and len(else_branch) > 0:
                         return else_branch[0].get("id")
-                    elif else_branch.get("id"):
+                    # Handle else branch as single step
+                    elif isinstance(else_branch, dict) and else_branch.get("id"):
                         return else_branch.get("id")
             # No branch selected, continue after conditional
             if idx + 1 < len(steps):
@@ -146,4 +168,16 @@ def get_first_step_id(steps: List[Dict[str, Any]]) -> Optional[str]:
     if not steps:
         return None
     return steps[0].get("id")
+
+
+def get_next_step(
+    current_step_id: str,
+    steps: List[Dict[str, Any]],
+    step_registry: Dict[str, Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    """Get the next step object (not just ID) after the current step."""
+    next_step_id = get_next_step_id(current_step_id, steps)
+    if next_step_id:
+        return step_registry.get(next_step_id)
+    return None
 

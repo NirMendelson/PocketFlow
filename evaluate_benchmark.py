@@ -83,9 +83,10 @@ Consider:
 
 Critical Rule:
 - Escalating means that the agent need to say that he is escalating, it doesn't matter the exact wording, the main thing is that you can infer from it that the agent is escalating (e.g., "I'll need to escalate it", "I'll escalate this", "I'm escalating your request", "I'm connecting you with a human agent", "I transfer this to a human agent").
-- If tone is different between the expected answer and the agent answer, but the core logic is the same -> pass it.
-- If the agent answer has more information than the expected answer, but the core logic is the same -> pass it.
-- If the agent answer has less information than the expected answer, but the core logic is the same -> pass it.
+- If tone is different between the expected answer and the agent answer, but the core logic is close enough -> pass it.
+- If the agent answer has more information than the expected answer, but the core logic is close enough -> pass it.
+- If the agent answer has less information than the expected answer, but the core logic is close enough -> pass it.
+- If the agent answer is different from the expected answer, but the core logic is close enough -> pass it.
 
 Return your evaluation in YAML format:
 

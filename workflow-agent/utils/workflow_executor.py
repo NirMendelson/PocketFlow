@@ -2,11 +2,13 @@ import os
 from typing import Dict, List, Any, Optional
 from utils.action_executor import (
     execute_fetch,
+    execute_fetch_with_condition,
+    evaluate_condition,
     execute_reply,
     execute_tool,
     execute_include
 )
-from utils.workflow_registry import build_step_registry, get_next_step_id, get_first_step_id
+from utils.workflow_registry import build_step_registry, get_next_step_id, get_first_step_id, get_next_step
 
 
 def _is_debugging_enabled():
@@ -123,45 +125,104 @@ def handle_fetch_action(
     steps: List[Dict[str, Any]],
     conversation_history: List[Dict[str, str]],
     extracted_fields: Dict[str, str],
-    workflow_name: str = ""
+    workflow_name: str = "",
+    step_registry: Optional[Dict[str, Dict[str, Any]]] = None
 ) -> Dict[str, Any]:
+    """
+    Handle fetch action. If the next step is a condition, use fetch_with_condition instead.
+    """
+    # Check if next step is a condition
+    if step_registry:
+        next_step = get_next_step(current_step_id, steps, step_registry)
+        if next_step and next_step.get("action") == "conditional":
+            # Use combined fetch_with_condition action
+            return handle_fetch_with_condition_action(
+                step, next_step, current_step_id, steps, conversation_history, 
+                extracted_fields, workflow_name, step_registry
+            )
+    
+    # Regular fetch action
     field_name = step.get("field", "")
-    condition = step.get("condition", {})
-    result = execute_fetch(step, conversation_history, extracted_fields)
+    result = execute_fetch(step, conversation_history)
     
     if result.get("found"):
-        # Field found - extract value
+        # Field found - extract value and continue to next step
         extracted_fields[result["field_name"]] = result["value"]
-        
-        # If condition exists, use condition_met to determine next step
-        if condition:
-            condition_met = result.get("condition_met", False)
-            next_step_id = get_next_step_id(current_step_id, steps, condition_met)
-            value_preview = str(result["value"])[:50] + "..." if len(str(result["value"])) > 50 else str(result["value"])
-            _log_workflow_step(
-                workflow_name, 
-                current_step_id, 
-                "fetch", 
-                f"extracted '{field_name}': {value_preview}, condition_met: {condition_met}"
-            )
-        else:
-            # No condition, just proceed to next step
-            next_step_id = get_next_step_id(current_step_id, steps)
-            value_preview = str(result["value"])[:50] + "..." if len(str(result["value"])) > 50 else str(result["value"])
-            _log_workflow_step(
-                workflow_name, 
-                current_step_id, 
-                "fetch", 
-                f"succeeded to extract '{field_name}' from conversation history: {value_preview}"
-            )
-        
+        next_step_id = get_next_step_id(current_step_id, steps)
         status = determine_workflow_status(next_step_id)
+        value_preview = str(result["value"])[:50] + "..." if len(str(result["value"])) > 50 else str(result["value"])
+        _log_workflow_step(workflow_name, current_step_id, "fetch", f"succeeded to extract '{field_name}' from conversation history: {value_preview}")
     else:
         # Field not found - question was asked, wait for user input
         # Stay on the same step so it can be retried when new input arrives
         next_step_id = current_step_id
         status = "waiting_for_input"
         _log_workflow_step(workflow_name, current_step_id, "fetch", f"needs to get '{field_name}' from user (question asked)")
+    
+    return build_step_result(
+        status=status,
+        next_step_id=next_step_id,
+        extracted_fields=extracted_fields
+    )
+
+
+def handle_fetch_with_condition_action(
+    fetch_step: Dict[str, Any],
+    condition_step: Optional[Dict[str, Any]],
+    current_step_id: str,
+    steps: List[Dict[str, Any]],
+    conversation_history: List[Dict[str, str]],
+    extracted_fields: Dict[str, str],
+    workflow_name: str = "",
+    step_registry: Optional[Dict[str, Dict[str, Any]]] = None
+) -> Dict[str, Any]:
+    """
+    Handle combined fetch and condition action in a single LLM call.
+    """
+    field_name = fetch_step.get("field", "")
+    
+    # If condition_step is None, the condition is embedded in fetch_step itself
+    if condition_step is None:
+        condition_step = fetch_step
+    
+    result = execute_fetch_with_condition(fetch_step, condition_step, conversation_history, extracted_fields)
+    
+    if result.get("found"):
+        # Field found - extract value
+        extracted_fields[result["field_name"]] = result["value"]
+        
+        # Evaluate condition result
+        condition_result = result.get("condition_result")
+        if condition_result is None:
+            # If condition_result wasn't provided, evaluate it separately
+            condition = condition_step.get("condition", {})
+            condition_result = evaluate_condition(condition, conversation_history, extracted_fields)
+        
+        # Get next step based on condition result
+        # If fetch_step has embedded then/else branches, use fetch_step's id (current_step_id)
+        # Otherwise, use condition_step's id
+        if fetch_step.get("then") or fetch_step.get("else"):
+            step_id_for_navigation = current_step_id
+        else:
+            step_id_for_navigation = condition_step.get("id") if condition_step else None
+        
+        if step_id_for_navigation:
+            next_step_id = get_next_step_id(step_id_for_navigation, steps, condition_result)
+        else:
+            next_step_id = None
+        
+        status = determine_workflow_status(next_step_id)
+        
+        value_preview = str(result["value"])[:50] + "..." if len(str(result["value"])) > 50 else str(result["value"])
+        _log_workflow_step(workflow_name, current_step_id, "fetch_with_condition", 
+                          f"succeeded to extract '{field_name}': {value_preview}, condition evaluated to {condition_result}, next step: {next_step_id}")
+    else:
+        # Field not found - question was asked, wait for user input
+        # Stay on the same step so it can be retried when new input arrives
+        next_step_id = current_step_id
+        status = "waiting_for_input"
+        _log_workflow_step(workflow_name, current_step_id, "fetch_with_condition", 
+                          f"needs to get '{field_name}' from user (question asked)")
     
     return build_step_result(
         status=status,
@@ -178,45 +239,8 @@ def handle_conditional_action(
     extracted_fields: Dict[str, str],
     workflow_name: str = ""
 ) -> Dict[str, Any]:
-    # For standalone conditional steps (without a preceding fetch), we need to evaluate the condition
-    # This is a fallback for cases where conditional is used independently
     condition = step.get("condition", {})
-    
-    # Check if we can infer the condition from extracted fields
-    # This is a simplified evaluation - in practice, you might want to use LLM for complex conditions
-    operator = condition.get('operator', '')
-    left = condition.get('left', '')
-    right = condition.get('right', '')
-    field = condition.get('field', '')
-    
-    # Extract field name from template variable in left if it's a template
-    field_name_from_left = None
-    left_str = str(left).strip()
-    if left_str.startswith("{{") and left_str.endswith("}}"):
-        field_name_from_left = left_str.replace("{{", "").replace("}}", "").strip()
-    
-    # Resolve template variables
-    resolved_left = str(left)
-    for field_name_key, field_val in extracted_fields.items():
-        resolved_left = resolved_left.replace(f"{{{{ {field_name_key} }}}}", str(field_val))
-        resolved_left = resolved_left.replace(f"{{{{{ {field_name_key} }}}}}", str(field_val))
-        right = str(right).replace(f"{{{{ {field_name_key} }}}}", str(field_val))
-        right = str(right).replace(f"{{{{{ {field_name_key} }}}}}", str(field_val))
-    
-    # For standalone conditionals, we'll use a simple evaluation
-    # Note: This is a fallback - ideally, conditionals should come after fetches
-    condition_result = False
-    display_field_name = field or field_name_from_left
-    if display_field_name and display_field_name in extracted_fields:
-        field_value = extracted_fields[display_field_name]
-        # Simple evaluation - for complex cases, consider using fetch_with_condition instead
-        if operator == "exists":
-            condition_result = bool(field_value)
-        elif operator == "not_equal":
-            condition_result = str(field_value).lower() != str(right).lower()
-        elif operator == "equal":
-            condition_result = str(field_value).lower() == str(right).lower()
-        # Add more operators as needed
+    condition_result = evaluate_condition(condition, conversation_history, extracted_fields)
     
     next_step_id = get_next_step_id(current_step_id, steps, condition_result)
     status = determine_workflow_status(next_step_id)
@@ -385,8 +409,30 @@ def execute_workflow_step(prep_res: Dict[str, Any]) -> Dict[str, Any]:
     
     if action == "fetch":
         return handle_fetch_action(
-            step, current_step_id, steps, conversation_history, extracted_fields, workflow_name
+            step, current_step_id, steps, conversation_history, extracted_fields, workflow_name, step_registry
         )
+    elif action == "fetch_with_condition":
+        # This action type can be explicitly set in workflow YAML
+        # Check if step has embedded condition with then/else branches
+        if step.get("condition") and (step.get("then") or step.get("else")):
+            # fetch_with_condition with embedded branches - handle directly
+            return handle_fetch_with_condition_action(
+                step, None, current_step_id, steps, conversation_history, 
+                extracted_fields, workflow_name, step_registry
+            )
+        else:
+            # Find the condition step (should be the next step)
+            next_step = get_next_step(current_step_id, steps, step_registry)
+            if next_step and next_step.get("action") == "conditional":
+                return handle_fetch_with_condition_action(
+                    step, next_step, current_step_id, steps, conversation_history, 
+                    extracted_fields, workflow_name, step_registry
+                )
+            else:
+                # Fallback to regular fetch if no condition step found
+                return handle_fetch_action(
+                    step, current_step_id, steps, conversation_history, extracted_fields, workflow_name, step_registry
+                )
     elif action == "conditional":
         return handle_conditional_action(
             step, current_step_id, steps, conversation_history, extracted_fields, workflow_name

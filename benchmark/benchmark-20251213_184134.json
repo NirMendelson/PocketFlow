@@ -5,6 +5,6 @@
     "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome. can you fix it?",
     "expected_answer": "Thanks for the details and for confirming you’re using Chrome. Next, can you please check that you have a strong and stable Wi-Fi connection, and then try again?",
     "topic": "Web Support",
-    "agent_answer": "Is the WiFi working properly on your device, or do you experience similar issues on other websites?"
+    "agent_answer": ""
   }
 ]

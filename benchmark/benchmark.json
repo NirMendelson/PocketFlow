@@ -1,9 +1,72 @@
 [
   {
-    "id": 13,
-    "instruction": "The policy is emailed to the customer immediately upon purchasing. They can also view the policy in the Faye app. If this is mentioned to them and they say they have not received this, escalate.",
-    "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy in the app or by email. What do I do?",
-    "expected_answer": "Thanks for letting me know. Since the policy is emailed immediately after purchase and should also appear in the app, and you haven’t received it in either place, I’ll escalate this right away so the team can look into it for you.",
-    "topic": "Email Issues"
+    "id": 1,
+    "instruction": "If a customer inquires about purchasing insurance and states they are not a US resident, do not ask which US state they will visit. Instead, inform them that Faye insurance is only available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+    "input": "Hi, I need help purchasing travel insurance. I’m not a US resident, I’m from Queensland. Can I buy Faye insurance for my trip?",
+    "expected_answer": "Thanks for reaching out! Faye insurance is only available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+    "topic": "Coverage"
+  },
+  {
+    "id": 2,
+    "instruction": "If you identify that any modifications are required to an existing policy, immediately escalate the issue to the appropriate authority or supervisor for review and approval before proceeding with any changes.",
+    "input": "Hi, I'm from NY. I bought a policy and noticed there's a typo in my last name. I need you to change it.",
+    "expected_answer": "Thanks for letting me know! Since this involves a modification to an existing policy, I’ll need to escalate your request to the appropriate authority for review and approval before any changes can be made. I’ll pass this along right away.",
+    "topic": "Coverage"
+  },
+  {
+    "id": 3,
+    "instruction": "If a customer continues to experience issues with any part of the quoting process after receiving one troubleshooting message, immediately escalate the issue to the appropriate support team.",
+    "input": "Hi, I'm from MO. Your quote link is broken, and the troubleshooting you sent me doesn't work. What do I do?",
+    "expected_answer": "I'm sorry you're still having trouble with the quote process. Since the issue persists after troubleshooting, I'll escalate this to our support team right away so they can assist you further.",
+    "topic": "Coverage"
+  },
+  {
+    "id": 4,
+    "instruction": "If you determine that travelers reside in different states, always inform them that all travelers must live in the same state to purchase a policy together. Advise them that if they live in different states, they must purchase separate policies, even if their question was about a different topic.",
+    "input": "Hi, I'm from CA. I want to buy coverage for my family trip. We are 4 — I'm Bobby Lee and my wife Andrew Santino are flying from CA to Mexico, and our daughter Rudy Jules is flying from Texas. We fly from 25/12/25 to 25/01/26. How much would it cost?",
+    "expected_answer": "Thanks for reaching out! Since some travelers live in different states, you won’t be able to purchase a single policy together. All travelers must reside in the same state to be on one policy. Because your daughter lives in Texas while you and your wife live in California, you’ll need to purchase separate policies for each state. I’m happy to help guide you through each one.",
+    "topic": "Coverage"
+  },
+  {
+    "id": 5,
+    "instruction": "When a customer asks about travel to a U.S. Department of State Level 4 (\"Do Not Travel\") destination, state that coverage is unavailable and do not list any benefits. This applies regardless of state of residence.",
+    "input": "Hi, I'm from TX. I want to visit my family in Afghanistan. I believe it's a Level 4 country. How much will it cost? Will it cost extra because of it?",
+    "expected_answer": "Thanks for reaching out. Coverage is unavailable for travel to any U.S. Department of State Level 4 (“Do Not Travel”) destination, including Afghanistan. We’re unable to offer a policy for this trip.",
+    "topic": "Coverage"
+  },
+  {
+    "id": 6,
+    "instruction": "If the customer is from Washington (WA) or Missouri (MO), inform them that the Adventure Sports add-on is not available in their state.",
+    "input": "Hi, I'm from Washington, and I want to do extreme white-water rafting in Skykomish. How much for adding this coverage?",
+    "expected_answer": "Thanks for reaching out! The Adventure Sports add-on is not available for residents of Washington, so unfortunately it can’t be added to your policy.",
+    "topic": "Extreme Activities and Adventure Sports"
+  },
+  {
+    "id": 7,
+    "instruction": "Currently, Faye does not offer an annual plan as we've determined that we can provide the most value with coverage for individual trips.",
+    "input": "Hi, I'm from CA. Look, I fly a lot and it's really frustrating to buy a coverage policy each time. Can you do an annual plan for me?",
+    "expected_answer": "I hear you — frequent travel can make this process feel repetitive. At the moment, Faye does not offer an annual plan, as we’ve found we can provide the most value through coverage for individual trips. I'm happy to help you with a new trip policy anytime you need one.",
+    "topic": "Annual policy"
+  },
+  {
+    "id": 8,
+    "instruction": "When responding to a customer who has lost their mobile phone, express genuine empathy by acknowledging their frustration and concern. Use a warm and understanding tone, and offer reassurance that you are there to help them through the process of resolving the issue.",
+    "input": "Hi, I'm from FL and I just lost my mobile phone while traveling. I'm really stressed — what should I do?",
+    "expected_answer": "I’m so sorry to hear that you lost your phone — that’s incredibly frustrating, especially while traveling. I’m here to help you through this. Let’s work together to figure out the next steps so you can get this resolved as quickly as possible.",
+    "topic": "Claims"
+  },
+  {
+    "id": 9,
+    "instruction": "If a customer is asking for an update or status of a claim that has already been filed, they can see the status of the claim in the Faye app, or email the claims team at claims@withfaye.com.",
+    "input": "Hi Im from CA, I have a claim, and it been some time since I sent it, can you tell me what its status?",
+    "expected_answer": "Thanks for reaching out! You can check the status of your claim directly in the Faye app. If you’d like more details or have specific questions, you can also email our claims team at claims@withfaye.com.",
+    "topic": "Claims"
+  },
+  {
+    "id": 10,
+    "instruction": "The Faye app is available only on phones (Apple/Android). If a person does not want to download the app or wants to view the claim/send info about the claim on their computer, they can send an email to claims@withfaye.com.",
+    "input": "Hi I'm from AZ, I want to send some papers about my claim, and I don't have a smart phone, what do I do?",
+    "expected_answer": "No worries at all — if you don’t have a smartphone, you can still manage your claim. You can email any documents or information directly to our claims team at claims@withfaye.com, and they’ll take care of it for you.",
+    "topic": "Claims"
   }
 ]

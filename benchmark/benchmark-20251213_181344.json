@@ -1,0 +1,10 @@
+[
+  {
+    "id": 17,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi Im from AL there is a bug in the website I get a 404. can you fix it?",
+    "expected_answer": "Thanks for letting me know about the issue. First, what browser you're using to access the website?",
+    "topic": "Web Support",
+    "agent_answer": "Which browser are you using when you encounter the 404 error? (e.g., Chrome, Firefox, Safari, Edge, etc.)"
+  }
+]
