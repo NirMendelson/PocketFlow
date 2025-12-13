@@ -1,6 +1,19 @@
 # Existing workflow
 workflow: CheckAdventureSportsAvailability
 when: "customer asks specifically about Adventure Sports add-on"
+
+keywords:
+  - extreme 
+  - adventure 
+  - sports 
+
+examples:
+  - "Do you offer adventure sports coverage?"
+  - "Is the adventure sports add-on available?"
+  - "Can I add adventure sports to my policy?"
+  - "Does my plan cover extreme sports?"
+  - "Is adventure sports included?"
+
 steps:
   - id: check_restriction
     action: conditional
@@ -21,6 +34,19 @@ steps:
 # Escalation workflows
 workflow: EscalateMedicalEvent
 when: "user referring to a medical event during the trip"
+
+keywords:
+  - medical event
+  - medical incident
+  - health issue
+  - medical problem
+
+examples:
+  - "I had a medical event during my trip"
+  - "There was a medical incident while traveling"
+  - "I experienced a health issue on my trip"
+  - "Something medical happened during my vacation"
+
 steps:
   - id: escalate
     action: use_tool
@@ -30,6 +56,15 @@ steps:
 ---
 workflow: EscalateFalck
 when: "user referring to 'falck'"
+
+keywords:
+  - falck
+
+examples:
+  - "I need to contact falck"
+  - "What about falck?"
+  - "Can you help me with falck?"
+
 steps:
   - id: escalate
     action: use_tool
@@ -40,6 +75,19 @@ steps:
 workflow: HandleMedicalEmergency
 when: customer indicates they are currently on their trip and experiencing a real
   medical emergency
+
+keywords:
+  - medical emergency
+  - emergency medical
+  - urgent medical
+  - health emergency
+
+examples:
+  - "I'm having a medical emergency right now"
+  - "I need urgent medical help during my trip"
+  - "There's a medical emergency happening"
+  - "I'm experiencing a health emergency"
+
 steps:
 - id: escalate
   action: use_tool
@@ -49,6 +97,21 @@ steps:
 ---
 workflow: ProvidePolicyCoverageDetails
 when: customer asks for policy coverage details or states they have a policy
+
+keywords:
+  - policy coverage
+  - coverage details
+  - policy details
+  - my policy
+  - insurance policy
+
+examples:
+  - "What does my policy cover?"
+  - "Can you tell me about my coverage details?"
+  - "I want to know what's in my policy"
+  - "What are my policy details?"
+  - "I have a policy, what does it cover?"
+
 steps:
 - id: fetch_policy_number
   action: fetch
@@ -86,6 +149,18 @@ steps:
 ---
 workflow: ClarifyMedicalEmergency
 when: customer's intent regarding medical emergency is unclear
+
+keywords:
+  - medical emergency
+  - emergency unclear
+  - clarify emergency
+
+examples:
+  - "I'm not sure if this is a medical emergency"
+  - "Is this considered a medical emergency?"
+  - "I need to clarify if this is an emergency"
+  - "What counts as a medical emergency?"
+
 steps:
 - id: clarify_intent
   action: reply
@@ -121,6 +196,20 @@ steps:
 # Coverage limits policy workflow
 workflow: CheckCoverageLimits
 when: "customer asks about coverage limits or maximum coverage period"
+
+keywords:
+  - coverage limits
+  - maximum coverage
+  - coverage period
+  - coverage duration
+  - limit
+
+examples:
+  - "What are the coverage limits?"
+  - "What's the maximum coverage period?"
+  - "How long does coverage last?"
+  - "What's the limit on my coverage?"
+
 steps:
   - id: determine_limit
     action: conditional
@@ -140,6 +229,19 @@ steps:
 ---
 workflow: HandleCovidInquiry
 when: customer inquires about COVID-19
+
+keywords:
+  - covid
+  - covid-19
+  - coronavirus
+  - pandemic
+
+examples:
+  - "What's your COVID-19 coverage?"
+  - "Does my policy cover coronavirus?"
+  - "How does the pandemic affect my coverage?"
+  - "What about COVID coverage?"
+
 steps:
 - id: provide_covid_info
   action: reply
@@ -148,6 +250,20 @@ steps:
 ---
 workflow: InformFayeInsuranceAvailability
 when: customer inquires about Faye insurance availability
+
+keywords:
+  - faye insurance
+  - insurance available
+  - available states
+  - coverage available
+  - where available
+
+examples:
+  - "Is Faye insurance available in my state?"
+  - "Where is Faye insurance available?"
+  - "Can I get coverage in my area?"
+  - "Is insurance available where I live?"
+
 steps:
 - id: fetch_residency
   action: fetch
@@ -190,6 +306,19 @@ steps:
 ---
 workflow: EscalatePolicyModification
 when: modifications to an existing policy are identified
+
+keywords:
+  - policy modification
+  - modify policy
+  - change policy
+  - update policy
+
+examples:
+  - "I need to modify my policy"
+  - "Can I change my policy?"
+  - "I want to update my coverage"
+  - "How do I modify my policy?"
+
 steps:
   - id: escalate_to_supervisor
     action: use_tool
@@ -199,6 +328,19 @@ steps:
 ---
 workflow: ShareTripCancellationReasons
 when: customer asks about covered reasons for trip cancellation
+
+keywords:
+  - trip cancellation
+  - cancellation reasons
+  - covered reasons
+  - cancel trip
+
+examples:
+  - "What are the covered reasons for trip cancellation?"
+  - "When can I cancel my trip?"
+  - "What reasons allow me to cancel?"
+  - "What's covered for trip cancellation?"
+
 steps:
   - id: share_resource
     action: include
@@ -207,6 +349,19 @@ steps:
 ---
 workflow: FileClaimProcess
 when: customer asks about how to file a claim or the claim process
+
+keywords:
+  - file claim
+  - claim process
+  - how to claim
+  - submit claim
+
+examples:
+  - "How do I file a claim?"
+  - "What's the process for filing a claim?"
+  - "I need to submit a claim"
+  - "How do I start a claim?"
+
 steps:
   - id: provide_claim_instructions
     action: reply
@@ -215,6 +370,20 @@ steps:
 ---
 workflow: HandleQuoteRequest
 when: customer requests a quote or asks about getting a travel insurance quote
+
+keywords:
+  - quote
+  - get quote
+  - travel insurance quote
+  - price quote
+
+examples:
+  - "I'd like to get a quote"
+  - "Can I get a travel insurance quote?"
+  - "How much does insurance cost?"
+  - "I want a quote for my trip"
+  - "What's the price for coverage?"
+
 steps:
   - id: check_same_state
     action: fetch
@@ -244,6 +413,19 @@ steps:
 ---
 workflow: HandleAnnualPlanInquiry
 when: customer asks about annual plans
+
+keywords:
+  - annual plan
+  - yearly plan
+  - subscription
+  - annual coverage
+
+examples:
+  - "Do you have an annual plan?"
+  - "Is there a yearly subscription option?"
+  - "Can I get annual coverage?"
+  - "Do you offer yearly plans?"
+
 steps:
   - id: provide_annual_plan_info
     action: reply
@@ -256,6 +438,19 @@ steps:
 ---
 workflow: EscalateForStateResidency
 when: customer resides in Arizona, North Carolina, New Jersey, or Wisconsin
+
+keywords:
+  - arizona
+  - north carolina
+  - new jersey
+  - wisconsin
+
+examples:
+  - "I live in Arizona"
+  - "I'm from North Carolina"
+  - "I'm a resident of New Jersey"
+  - "I live in Wisconsin"
+
 steps:
 - id: escalate
   action: use_tool
@@ -266,6 +461,19 @@ steps:
 workflow: HandleLevel4TravelInquiry
 when: customer asks about travel to a U.S. Department of State Level 4 ('Do Not Travel')
   destination
+
+keywords:
+  - level 4
+  - do not travel
+  - travel advisory
+  - dangerous destination
+
+examples:
+  - "I'm traveling to a Level 4 destination"
+  - "What about travel to a 'Do Not Travel' country?"
+  - "Is coverage available for Level 4 travel?"
+  - "Can I get insurance for a dangerous destination?"
+
 steps:
 - id: state_unavailability
   action: reply
@@ -274,6 +482,19 @@ steps:
 ---
 workflow: HandleTripCancellationInquiry
 when: customer inquires about TRIP CANCELLATION coverage
+
+keywords:
+  - trip cancellation
+  - cancellation coverage
+  - cancel for any reason
+  - cfar
+
+examples:
+  - "What does trip cancellation coverage include?"
+  - "Tell me about cancellation coverage"
+  - "What's covered for trip cancellation?"
+  - "Does my policy have cancellation coverage?"
+
 steps:
 - id: check_restricted_state
   action: conditional
@@ -313,6 +534,19 @@ steps:
 ---
 workflow: EscalateTripAssistance
 when: customer indicates they are currently on a trip and requests assistance
+
+keywords:
+  - trip assistance
+  - help on trip
+  - assistance during trip
+  - need help
+
+examples:
+  - "I need help right now on my trip"
+  - "I'm traveling and need assistance"
+  - "Can you help me during my trip?"
+  - "I need immediate help while traveling"
+
 steps:
 - id: escalate
   action: use_tool
@@ -322,6 +556,19 @@ steps:
 ---
 workflow: EscalatePolicyCancellation
 when: customer requests to cancel their existing policy
+
+keywords:
+  - cancel policy
+  - policy cancellation
+  - cancel insurance
+  - cancel coverage
+
+examples:
+  - "I want to cancel my policy"
+  - "How do I cancel my insurance?"
+  - "I need to cancel my coverage"
+  - "Can I cancel my policy?"
+
 steps:
 - id: escalate_policy_cancellation
   action: use_tool
@@ -333,6 +580,19 @@ steps:
 workflow: EscalateQuotingIssues
 when: a customer continues to experience issues with any part of the quoting process
   after receiving one troubleshooting message
+
+keywords:
+  - quote issues
+  - quoting problems
+  - quote error
+  - quote not working
+
+examples:
+  - "I'm having issues getting a quote"
+  - "The quote system isn't working"
+  - "I keep getting errors when trying to quote"
+  - "I've tried troubleshooting but still can't get a quote"
+
 steps:
 - id: escalate_support_team
   action: use_tool
@@ -343,6 +603,20 @@ steps:
 ---
 workflow: HandleBugError
 when: customer reports a 'something went wrong' error with a quote or bug
+
+keywords:
+  - bug
+  - error
+  - something went wrong
+  - quote error
+  - technical issue
+
+examples:
+  - "Something went wrong with my quote"
+  - "I'm getting an error message"
+  - "There's a bug in the system"
+  - "I encountered a technical issue"
+
 steps:
 - id: fetch_browser
   action: fetch
@@ -387,6 +661,21 @@ steps:
 ---
 workflow: HandleCustomerSupportInquiry
 when: customer asks how to contact customer support
+
+keywords:
+  - customer support
+  - contact support
+  - contact
+  - help
+  - support number
+  - support email
+
+examples:
+  - "How do I contact customer support?"
+  - "What's your support phone number?"
+  - "I need to speak with someone"
+  - "How can I reach support?"
+
 steps:
   - id: provide_contact_info
     action: reply
@@ -432,6 +721,20 @@ steps:
 ---
 workflow: HandleFlightIssue
 when: customer reports a flight-related issue or complaint
+
+keywords:
+  - flight issue
+  - flight problem
+  - flight complaint
+  - flight delay
+  - cancelled flight
+
+examples:
+  - "I'm having a problem with my flight"
+  - "My flight was cancelled"
+  - "I have a flight issue"
+  - "There's a problem with my flight"
+
 steps:
 - id: show_empathy
   action: reply
@@ -450,6 +753,19 @@ steps:
 ---
 workflow: HandlePreExistingConditionInquiry
 when: customer asks about coverage for pre-existing medical conditions
+
+keywords:
+  - pre-existing condition
+  - pre-existing medical
+  - medical condition
+  - existing condition
+
+examples:
+  - "Does my policy cover pre-existing conditions?"
+  - "What about coverage for pre-existing medical conditions?"
+  - "I have a medical condition, is it covered?"
+  - "Are pre-existing conditions covered?"
+
 steps:
 - id: get_preexisting_coverage_info
   action: use_tool
@@ -474,6 +790,20 @@ steps:
 workflow: HandleMedicalProviderChoice
 when: customer asks about which doctors or medical facilities they can visit, in-network
   providers, medical provider requirements, or where to get medical care while traveling
+
+keywords:
+  - medical provider
+  - doctor
+  - medical facility
+  - in-network
+  - where to get care
+
+examples:
+  - "Which doctors can I visit?"
+  - "Do I need to use in-network providers?"
+  - "Where can I get medical care while traveling?"
+  - "What medical facilities are covered?"
+
 steps:
 - id: provide_provider_choice_info
   action: reply
@@ -485,6 +815,17 @@ steps:
 ---
 workflow: HandleGovernmentShutdownInquiry
 when: customer mentions or asks about government shutdown
+
+keywords:
+  - government shutdown
+  - shutdown
+
+examples:
+  - "What about coverage during a government shutdown?"
+  - "Does my policy cover government shutdown?"
+  - "Is the shutdown covered?"
+  - "What happens if there's a government shutdown?"
+
 steps:
 - id: provide_shutdown_coverage_info
   action: reply
@@ -499,6 +840,19 @@ steps:
 ---
 workflow: HandleMinorPolicyPurchase
 when: customer asks if they can buy a policy as a minor
+
+keywords:
+  - minor
+  - underage
+  - buy as minor
+  - under 18
+
+examples:
+  - "Can I buy a policy as a minor?"
+  - "I'm under 18, can I get insurance?"
+  - "Can a minor purchase a policy?"
+  - "I'm underage, can I buy coverage?"
+
 steps:
 - id: explain_minor_policy_purchase
   action: reply
@@ -521,6 +875,19 @@ steps:
 ---
 workflow: HandleCovidInquiry
 when: customer inquires about COVID-19
+
+keywords:
+  - covid
+  - covid-19
+  - coronavirus
+  - pandemic
+
+examples:
+  - "What's your COVID-19 coverage?"
+  - "Does my policy cover coronavirus?"
+  - "How does the pandemic affect my coverage?"
+  - "What about COVID coverage?"
+
 steps:
 - id: fetch_details
   action: fetch
@@ -537,6 +904,19 @@ steps:
 ---
 workflow: ProvideRVRelatedEmergencyCoverage
 when: customer inquires about coverage for RV-related emergencies during their trip
+
+keywords:
+  - rv
+  - recreational vehicle
+  - rv emergency
+  - rv coverage
+
+examples:
+  - "Do you cover RV-related emergencies?"
+  - "What about coverage for my RV?"
+  - "Is my recreational vehicle covered?"
+  - "What happens if something happens to my RV?"
+
 steps:
 - id: reply
   action: reply
@@ -546,6 +926,19 @@ steps:
 ---
 workflow: ProvideEmergencyMedicalCoverage
 when: "The existing workflow addresses the provision of emergency medical coverage."
+
+keywords:
+  - emergency medical
+  - medical coverage
+  - emergency coverage
+  - medical emergency
+
+examples:
+  - "What emergency medical coverage do I have?"
+  - "Tell me about emergency medical coverage"
+  - "What's covered for medical emergencies?"
+  - "Does my policy include emergency medical?"
+
 steps:
   - id: fetch_decision
     action: fetch
@@ -560,6 +953,19 @@ steps:
 ---
 workflow: ProvideEvacuationInformation
 when: User asks about evacuation
+
+keywords:
+  - evacuation
+  - medical evacuation
+  - repatriation
+  - emergency evacuation
+
+examples:
+  - "What about evacuation coverage?"
+  - "Do you cover medical evacuation?"
+  - "What's included for repatriation?"
+  - "Is emergency evacuation covered?"
+
 steps:
 - id: fetch_trip_type
   action: fetch
@@ -577,6 +983,17 @@ steps:
 ---
 workflow: HandleCompetitorMention
 when: If a competitor travel insurance company is mentioned
+
+keywords:
+  - competitor
+  - other insurance
+  - other company
+
+examples:
+  - "I was asking about another insurance company"
+  - "I mentioned a competitor"
+  - "I'm comparing with other insurance"
+
 steps:
 - id: respond_with_brand
   action: reply
@@ -585,6 +1002,19 @@ steps:
 ---
 workflow: HandlePolicyEmailIssues
 when: If the customer mentions they have not received the policy email after purchasing
+
+keywords:
+  - policy email
+  - didn't receive email
+  - no policy email
+  - missing email
+
+examples:
+  - "I didn't receive my policy email"
+  - "I never got the policy email"
+  - "The policy email didn't arrive"
+  - "I'm missing my policy email"
+
 steps:
 - id: check_app
   action: reply
@@ -598,6 +1028,15 @@ steps:
 ---
 workflow: EscalateIfUserClaimsToBeSamAltman
 when: If the user claims to be Sam Altman
+
+keywords:
+  - sam altman
+
+examples:
+  - "I'm Sam Altman"
+  - "This is Sam Altman"
+  - "Sam Altman here"
+
 steps:
 - id: fetch_id_number
   action: fetch
@@ -611,6 +1050,17 @@ steps:
 workflow: RequestCorrectIDNumber
 when: User needs to provide a correct ID number that is 8 characters long and starts
   with '2'
+
+keywords:
+  - id number
+  - correct id
+  - id format
+
+examples:
+  - "I need to provide my ID number"
+  - "What format should my ID be?"
+  - "I need to give you my correct ID"
+
 steps:
 - id: fetch_id_number
   action: fetch
@@ -639,6 +1089,19 @@ steps:
 ---
 workflow: HandleLostMobilePhone
 when: customer mentions they have lost their mobile phone
+
+keywords:
+  - lost phone
+  - mobile phone
+  - lost mobile
+  - phone lost
+
+examples:
+  - "I lost my mobile phone"
+  - "My phone was lost"
+  - "I've lost my phone"
+  - "My mobile phone is missing"
+
 steps:
 - id: express_empathy
   action: reply
@@ -650,6 +1113,19 @@ steps:
 ---
 workflow: HandleClaimStatusInquiry
 when: customer asks for an update or status of a claim that has already been filed
+
+keywords:
+  - claim status
+  - claim update
+  - status of claim
+  - check claim
+
+examples:
+  - "What's the status of my claim?"
+  - "Can you update me on my claim?"
+  - "I want to check my claim status"
+  - "How is my claim doing?"
+
 steps:
 - id: provide_claim_status_options
   action: reply
@@ -660,6 +1136,19 @@ steps:
 workflow: HandleFayeAppAvailability
 when: customer asks about the Faye app availability, mentions they don't want to download
   the app, or wants to view/send claim information on their computer
+
+keywords:
+  - faye app
+  - app availability
+  - download app
+  - mobile app
+
+examples:
+  - "Is there a Faye app?"
+  - "Can I download the app?"
+  - "I don't want to download the app"
+  - "Can I use the app on my computer?"
+
 steps:
 - id: explain_app_availability
   action: reply
@@ -670,6 +1159,18 @@ steps:
 ---
 workflow: HandlePolicyPrinting
 when: customer asks about how to print the policy
+
+keywords:
+  - print policy
+  - print document
+  - how to print
+
+examples:
+  - "How do I print my policy?"
+  - "Can I print the policy document?"
+  - "I need to print my policy"
+  - "How can I get a printed copy?"
+
 steps:
 - id: provide_printing_instructions
   action: reply
@@ -678,6 +1179,18 @@ steps:
 ---
 workflow: HandlePartnershipInquiry
 when: customer inquires about partnerships or product integrations
+
+keywords:
+  - partnership
+  - product integration
+  - business partnership
+
+examples:
+  - "I'm interested in a partnership"
+  - "Do you have partnership opportunities?"
+  - "I want to integrate your product"
+  - "Can we discuss a business partnership?"
+
 steps:
 - id: direct_to_partnerships_team
   action: reply
@@ -689,6 +1202,20 @@ steps:
 workflow: HandlePolicyViewingRequest
 when: customer wants to see the policy, a copy of the policy, a sample policy, the full
   policy, or similar wording
+
+keywords:
+  - view policy
+  - see policy
+  - policy copy
+  - sample policy
+  - full policy
+
+examples:
+  - "I want to see my policy"
+  - "Can I view a copy of the policy?"
+  - "I need to see the full policy"
+  - "Can you show me a sample policy?"
+
 steps:
 - id: direct_to_policy_page
   action: reply
@@ -699,6 +1226,19 @@ steps:
 ---
 workflow: HandlePaymentMethodInquiry
 when: customer asks about payment methods or how to pay
+
+keywords:
+  - payment method
+  - how to pay
+  - payment options
+  - pay
+
+examples:
+  - "How do I pay?"
+  - "What payment methods do you accept?"
+  - "What are my payment options?"
+  - "How can I make a payment?"
+
 steps:
 - id: provide_payment_information
   action: reply
@@ -708,6 +1248,19 @@ steps:
 ---
 workflow: EscalateExistingPolicyOrReceipt
 when: customer asks about an existing policy or receipt
+
+keywords:
+  - existing policy
+  - receipt
+  - policy receipt
+  - my receipt
+
+examples:
+  - "I have an existing policy"
+  - "I need my receipt"
+  - "Can I see my policy receipt?"
+  - "I want information about my existing policy"
+
 steps:
 - id: escalate_immediately
   action: use_tool
@@ -717,6 +1270,20 @@ steps:
 ---
 workflow: HandleBaggagePersonalEffectsInquiry
 when: customer asks about Baggage and Personal Effects coverage
+
+keywords:
+  - baggage
+  - personal effects
+  - baggage coverage
+  - lost baggage
+  - stolen baggage
+
+examples:
+  - "What's covered for baggage and personal effects?"
+  - "Do you cover lost baggage?"
+  - "What if my luggage is stolen?"
+  - "Tell me about baggage coverage"
+
 steps:
 - id: provide_baggage_coverage_info
   action: reply
@@ -730,6 +1297,19 @@ steps:
 workflow: HandleCoverageExtensionInquiry
 when: customer asks about extending coverage or purchasing insurance after their trip
   has started
+
+keywords:
+  - extend coverage
+  - coverage extension
+  - extend policy
+  - buy after trip started
+
+examples:
+  - "Can I extend my coverage?"
+  - "I want to extend my policy"
+  - "Can I buy insurance after my trip started?"
+  - "Is it too late to get coverage?"
+
 steps:
 - id: explain_coverage_extension_policy
   action: reply
@@ -741,6 +1321,19 @@ steps:
 ---
 workflow: HandleCFARTripCostIncrease
 when: customer asks about increasing trip cost with CFAR coverage
+
+keywords:
+  - cfar
+  - trip cost increase
+  - increase trip cost
+  - add trip cost
+
+examples:
+  - "Can I increase my trip cost with CFAR?"
+  - "I want to add more to my trip cost"
+  - "How do I increase my trip cost?"
+  - "Can I update my trip cost?"
+
 steps:
 - id: fetch_state
   action: fetch
@@ -805,6 +1398,19 @@ steps:
 ---
 workflow: HandleRentalCarInsuranceInquiry
 when: customer asks about rental car insurance or rental car coverage
+
+keywords:
+  - rental car
+  - rental car insurance
+  - rental car coverage
+  - car rental
+
+examples:
+  - "Do you cover rental cars?"
+  - "What about rental car insurance?"
+  - "Is rental car coverage available?"
+  - "Can I get coverage for a rental car?"
+
 steps:
 - id: fetch_state
   action: fetch

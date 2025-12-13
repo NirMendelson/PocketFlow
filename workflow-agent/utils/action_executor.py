@@ -251,17 +251,59 @@ Generate a natural, friendly message informing the user that you're escalating/t
     }
 
 
-def execute_include(step: Dict[str, Any]) -> str:
+def execute_include(step: Dict[str, Any], conversation_history: List[Dict[str, str]], tone_config: Dict[str, Any]) -> str:
     """
-    Execute an include action: add information/link.
+    Execute an include action: generate reply with information/link.
     
     Args:
         step: Step definition with 'information' key
+        conversation_history: List of conversation messages
+        tone_config: Tone configuration from tone.yaml
     
     Returns:
-        Information string
+        Generated reply message that includes the information/link
     """
     information = step.get('information', '')
     
-    return information
+    # Format tone config for prompt
+    identity = tone_config.get('identity', {})
+    tone_list = tone_config.get('tone', [])
+    guidelines = tone_config.get('guidelines', [])
+    
+    tone_text = "\n".join([f"- {t}" for t in tone_list])
+    guidelines_text = "\n".join([f"- {g}" for g in guidelines])
+    
+    prompt = f"""You are an AI assistant providing support.
+
+Identity:
+- Role: {identity.get('role', 'AI assistant')}
+- Positioning: {identity.get('positioning', 'helpful companion')}
+
+Tone Guidelines:
+{tone_text}
+
+Additional Guidelines:
+{guidelines_text}
+
+The user has asked a question, and you need to provide a helpful response that includes this information/link: {information}
+
+Conversation context:
+{chr(10).join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-3:]])}
+
+Generate a natural, friendly reply that:
+1. Acknowledges the user's question/concern
+2. Includes the information/link naturally in your response
+3. Follows the tone guidelines
+
+Return ONLY the reply message, nothing else."""
+
+    reply = call_llm(prompt).strip()
+    
+    # Add reply to conversation history
+    conversation_history.append({
+        "role": "assistant",
+        "content": reply
+    })
+    
+    return reply
 

@@ -5,4 +5,5 @@ python-dotenv
 sentence-transformers
 scikit-learn
 numpy
+rapidfuzz
 

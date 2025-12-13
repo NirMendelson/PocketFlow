@@ -1,0 +1,58 @@
+[
+    {
+      "id": 12,
+      "instruction": "ALWAYS share the link https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/ when discussing covered reasons for trip cancellation with customers.",
+      "input": "Hi, I'm from GA. I'm thinking of canceling my upcoming trip because of a family emergency. What are the covered reasons for trip cancellation?",
+      "expected_answer": "I’m sorry to hear you're dealing with a family emergency. You can review all covered reasons for trip cancellation here: https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/. This page explains when you may be eligible for reimbursement.",
+      "topic": "Claims"
+    },           
+    {
+      "id": 14,
+      "instruction": "When customers reach out asking Faye's contact information.\n\nCustomers can always chat with us in the Faye app, email us at support@withfaye.com or call us at 1-833-240-7056 (US/Canada). From all other locations, call us at 1-804-482-2122. We're available 24/7.",
+      "input": "Hi, I'm from CO. Can you give me Faye’s contact information?",
+      "expected_answer": "Of course! You can always chat with us directly in the Faye app, email us at support@withfaye.com, or call us at 1-833-240-7056 from the US or Canada. If you're traveling internationally, you can reach us at 1-804-482-2122. We're available 24/7 and here to help.",
+      "topic": "Contact details"
+    },
+    {
+      "id": 17,
+      "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+      "input": "Hi Im from AL there is a bug in the website I get a 404. can you fix it?",
+      "expected_answer": "Thanks for letting me know about the issue. First, can you please confirm that you’re using the Google Chrome browser to access the website?",
+      "topic": "Web Support"
+    },
+    {
+      "id": 18,
+      "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+      "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome. can you fix it?",
+      "expected_answer": "Thanks for the details and for confirming you’re using Chrome. Next, can you please check that you have a strong and stable Wi-Fi connection, and then try again?",
+      "topic": "Web Support"
+    },
+    {
+      "id": 20,
+      "instruction": "When customers inquire about partnerships or product integrations, direct them to the partnership business development team by providing the email address partnerships@withfaye.com. Inform them that the team will respond if the inquiry is relevant.",
+      "input": "Hi, I'm from CA. I run a travel booking platform and I’d like to explore integrating Faye into our product. Who should I talk to?",
+      "expected_answer": "Thanks for reaching out and for your interest in partnering with Faye. For partnership and product integration inquiries, please contact our partnership business development team at partnerships@withfaye.com. They review all inquiries and will get back to you if it’s relevant.",
+      "topic": "Web Support"
+    },
+    {
+      "id": 23,
+      "instruction": "If a customer asks about an existing policy or receipt, escalate the inquiry immediately without asking any follow-up questions.",
+      "input": "Hi I'm from UT, I have policy number 43198791 and I think I got charged more than I should. Please tell me what went wrong.",
+      "expected_answer": "Thanks for reaching out. Since this involves an existing policy and billing, I’ll escalate your inquiry right away so the appropriate team can review it for you.",
+      "topic": "Customer Purchases"
+    },
+    {
+      "id": 28,
+      "instruction": "If you have CFAR, you can only increase the trip cost if you do so within 14 days of purchasing the travel arrangement that you are adding the cost of (or 15 days if you live in AZ, NC, NJ, WI).",
+      "input": "Hi, I'm from NJ. I bought my flights three weeks ago and I have CFAR. Can I increase my trip cost to include a new hotel I booked?",
+      "expected_answer": "Thanks for reaching out! Since you live in NJ, you can increase your trip cost within 15 days of purchasing the travel arrangement you're adding. Because your flights were purchased three weeks ago, you’re outside that window, so you wouldn’t be able to increase your trip cost at this point.",
+      "topic": "Policy Changes"
+    },
+    {
+      "id": 29,
+      "instruction": "Rental car insurance is not available for residents of Hawaii. When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for: physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler’s control; theft of the vehicle (if unrecovered); loss-of-use charges or administrative fees charged by the rental agency.",
+      "input": "Hi, I'm from HI and I'm renting a car in Japan. How much does rental car insurance cost if I add it?",
+      "expected_answer": "Thanks for reaching out! Rental car insurance is not available for residents of Hawaii, so it can’t be added to your policy.",
+      "topic": "Rental car"
+    }
+]

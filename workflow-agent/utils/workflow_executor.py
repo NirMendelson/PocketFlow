@@ -123,7 +123,7 @@ def build_step_result(
     Build standardized step execution result.
     
     Args:
-        status: Execution status ("continue", "complete", "no_workflow")
+        status: Execution status ("continue", "complete", "no_workflow", "waiting_for_input")
         next_step_id: ID of next step to execute
         extracted_fields: Updated extracted fields (optional)
         reply: Generated reply message (optional)
@@ -185,10 +185,15 @@ def handle_fetch_action(
     result = execute_fetch(step, conversation_history)
     
     if result.get("found"):
+        # Field found - extract value and continue to next step
         extracted_fields[result["field_name"]] = result["value"]
-    
-    next_step_id = get_next_step_id(current_step_id, steps)
-    status = determine_workflow_status(next_step_id)
+        next_step_id = get_next_step_id(current_step_id, steps)
+        status = determine_workflow_status(next_step_id)
+    else:
+        # Field not found - question was asked, wait for user input
+        # Stay on the same step so it can be retried when new input arrives
+        next_step_id = current_step_id
+        status = "waiting_for_input"
     
     return build_step_result(
         status=status,
@@ -253,7 +258,14 @@ def handle_reply_action(
     """
     reply = execute_reply(step, conversation_history, tone_config, extracted_fields)
     next_step_id = get_next_step_id(current_step_id, steps)
-    status = determine_workflow_status(next_step_id)
+    
+    # If there's a next step, wait for user input before continuing
+    # (The next step might be a fetch that needs user response)
+    if next_step_id:
+        status = "waiting_for_input"
+    else:
+        # No next step - workflow is complete
+        status = "complete"
     
     return build_step_result(
         status=status,
@@ -295,7 +307,9 @@ def handle_tool_action(
 def handle_include_action(
     step: Dict[str, Any],
     current_step_id: str,
-    steps: List[Dict[str, Any]]
+    steps: List[Dict[str, Any]],
+    conversation_history: List[Dict[str, str]],
+    tone_config: Dict[str, Any]
 ) -> Dict[str, Any]:
     """
     Handle include action execution.
@@ -304,18 +318,27 @@ def handle_include_action(
         step: Step definition
         current_step_id: Current step ID
         steps: List of workflow steps
+        conversation_history: List of conversation messages
+        tone_config: Tone configuration
         
     Returns:
         Step execution result
     """
-    info = execute_include(step)
+    reply = execute_include(step, conversation_history, tone_config)
     next_step_id = get_next_step_id(current_step_id, steps)
-    status = determine_workflow_status(next_step_id)
+    
+    # If there's a next step, wait for user input before continuing
+    # (The next step might be a fetch that needs user response)
+    if next_step_id:
+        status = "waiting_for_input"
+    else:
+        # No next step - workflow is complete
+        status = "complete"
     
     return build_step_result(
         status=status,
         next_step_id=next_step_id,
-        include_info=info
+        reply=reply
     )
 
 
@@ -397,7 +420,9 @@ def execute_workflow_step(prep_res: Dict[str, Any]) -> Dict[str, Any]:
             step, current_step_id, steps, conversation_history, tone_config
         )
     elif action == "include":
-        return handle_include_action(step, current_step_id, steps)
+        return handle_include_action(
+            step, current_step_id, steps, conversation_history, tone_config
+        )
     else:
         raise ValueError(f"unknown action type: '{action}' in step '{current_step_id}'")
 

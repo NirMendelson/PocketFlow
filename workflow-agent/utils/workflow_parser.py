@@ -24,7 +24,13 @@ def load_workflows(path: str) -> Dict[str, Dict[str, Any]]:
     
     for section in workflow_sections:
         section = section.strip()
-        if not section or section.startswith('#'):
+        if not section:
+            continue
+        
+        # Skip sections that are ONLY comments (no actual content)
+        # But allow sections that have comments followed by YAML content
+        lines = [line.strip() for line in section.split('\n') if line.strip()]
+        if not lines or all(line.startswith('#') for line in lines):
             continue
         
         try:

@@ -1,8 +1,11 @@
 """Main entry point for workflow agent."""
 
+import os
+# Set TOKENIZERS_PARALLELISM before any tokenizer imports to suppress warnings
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import json
 import sys
-import os
 from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
@@ -75,7 +78,9 @@ def main():
                     break
             
             # Print results
-            print(f"\nSelected Workflow: {shared.get('selected_workflow', {}).get('name', 'None')}")
+            selected_workflow = shared.get('selected_workflow')
+            workflow_name = selected_workflow.get('name', 'None') if selected_workflow else 'None'
+            print(f"\nSelected Workflow: {workflow_name}")
             print(f"\nAgent Answer: {agent_answer[:200]}...")
             print(f"\nExpected Answer: {entry.get('expected_answer', '')[:200]}...")
             

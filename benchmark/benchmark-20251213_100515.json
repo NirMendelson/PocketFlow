@@ -1,0 +1,10 @@
+[
+  {
+    "id": 14,
+    "instruction": "When customers reach out asking Faye's contact information.\n\nCustomers can always chat with us in the Faye app, email us at support@withfaye.com or call us at 1-833-240-7056 (US/Canada). From all other locations, call us at 1-804-482-2122. We're available 24/7.",
+    "input": "Hi, I'm from CO. Can you give me Faye’s contact information?",
+    "expected_answer": "Of course! You can always chat with us directly in the Faye app, email us at support@withfaye.com, or call us at 1-833-240-7056 from the US or Canada. If you're traveling internationally, you can reach us at 1-804-482-2122. We're available 24/7 and here to help.",
+    "topic": "Contact details",
+    "agent_answer": "Faye insurance is ONLY available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico. If you're from Colorado, you are eligible! 😊 \n\nIf you need further information or assistance, feel free to ask!"
+  }
+]
