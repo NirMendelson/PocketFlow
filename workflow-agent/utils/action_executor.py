@@ -349,40 +349,70 @@ def execute_reply(step: Dict[str, Any], conversation_history: List[Dict[str, str
         message_template = message_template.replace(f"{{{{ {field_name} }}}}", str(field_value))
         message_template = message_template.replace(f"{{{{{ {field_name} }}}}}", str(field_value))
     
-    # Format tone config for prompt
+    # Format entire tone config into a single tone_text string
+    tone_parts = []
+    
+    # Add identity section
     identity = tone_config.get('identity', {})
+    if identity:
+        tone_parts.append("Identity:")
+        if identity.get('role'):
+            tone_parts.append(f"  Role: {identity.get('role')}")
+        if identity.get('positioning'):
+            tone_parts.append(f"  Positioning: {identity.get('positioning')}")
+        tone_parts.append("")
+    
+    # Add tone section
     tone_list = tone_config.get('tone', [])
+    if tone_list:
+        tone_parts.append("Tone:")
+        for t in tone_list:
+            tone_parts.append(f"  - {t}")
+        tone_parts.append("")
+    
+    # Add guidelines section
     guidelines = tone_config.get('guidelines', [])
+    if guidelines:
+        tone_parts.append("Guidelines:")
+        for g in guidelines:
+            tone_parts.append(f"  - {g}")
     
-    tone_text = "\n".join([f"- {t}" for t in tone_list])
-    guidelines_text = "\n".join([f"- {g}" for g in guidelines])
+    tone_text = "\n".join(tone_parts)
     
-    prompt = f"""You are an AI assistant providing support.
+    # Format conversation history
+    conversation_context = chr(10).join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-3:]])
+    
+    prompt = f"""You need to send this reply message: {message_template}
 
-Identity:
-- Role: {identity.get('role', 'AI assistant')}
-- Positioning: {identity.get('positioning', 'helpful companion')}
-
-Tone Guidelines:
+Generate the response using the tone below:
 {tone_text}
 
-Additional Guidelines:
-{guidelines_text}
+Read the conversation history to answer correctly in context:
+{conversation_context}
 
-Generate a reply message based on this template: {message_template}
+CRITICAL:
+- You don't need to write it like reply message word for word, but you must keep all of the information from the reply message.
+- Apply the tone and make the message fit the conversation history. 
+- Don't add information that is not in the reply message.
+- Don't leave out any information that is in the reply message.
+Return ONLY the reply message, nothing else."""
 
-Conversation context:
-{chr(10).join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-3:]])}
-
-Generate a natural, friendly reply that follows the tone guidelines. Return ONLY the reply message, nothing else."""
-
+    if _is_debugging_enabled():
+        print(f"[DEBUG] reply prompt:\n{prompt}\n")
+    
     reply = call_litellm(prompt).strip()
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] reply response:\n{reply}\n")
     
     # Add reply to conversation history
     conversation_history.append({
         "role": "assistant",
         "content": reply
     })
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] reply result: {reply}\n")
     
     return reply
 
@@ -396,34 +426,55 @@ def execute_tool(step: Dict[str, Any], conversation_history: Optional[List[Dict[
     
     # If escalation tool, generate a message about transferring to human agent
     if tool_name == "escalation" and conversation_history is not None and tone_config is not None:
-        # Generate escalation message using LLM with tone guidelines
+        # Format entire tone config into a single tone_text string (same as execute_reply)
+        tone_parts = []
+        
+        # Add identity section
         identity = tone_config.get('identity', {})
+        if identity:
+            tone_parts.append("Identity:")
+            if identity.get('role'):
+                tone_parts.append(f"  Role: {identity.get('role')}")
+            if identity.get('positioning'):
+                tone_parts.append(f"  Positioning: {identity.get('positioning')}")
+            tone_parts.append("")
+        
+        # Add tone section
         tone_list = tone_config.get('tone', [])
+        if tone_list:
+            tone_parts.append("Tone:")
+            for t in tone_list:
+                tone_parts.append(f"  - {t}")
+            tone_parts.append("")
+        
+        # Add guidelines section
         guidelines = tone_config.get('guidelines', [])
+        if guidelines:
+            tone_parts.append("Guidelines:")
+            for g in guidelines:
+                tone_parts.append(f"  - {g}")
         
-        tone_text = "\n".join([f"- {t}" for t in tone_list])
-        guidelines_text = "\n".join([f"- {g}" for g in guidelines])
+        tone_text = "\n".join(tone_parts)
         
-        prompt = f"""You are an AI assistant providing support.
-
-Identity:
-- Role: {identity.get('role', 'AI assistant')}
-- Positioning: {identity.get('positioning', 'helpful companion')}
-
-Tone Guidelines:
-{tone_text}
-
-Additional Guidelines:
-{guidelines_text}
-
-You need to inform the user that you are escalating their request to a human agent for review and approval.
+        # Format conversation history (same as execute_reply)
+        conversation_context = chr(10).join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-3:]])
+        
+        prompt = f"""You need to inform the user that you are escalating their request to a human agent for review and approval.
 
 Reason for escalation: {reason}
 
-Conversation context:
-{chr(10).join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-3:]])}
+Generate the response using the tone below:
+{tone_text}
 
-Generate a natural, friendly message informing the user that you're escalating/transferring their request to a human agent. Use phrases like "I'll need to escalate your request" or "I'm transferring you to a human agent". Return ONLY the message, nothing else."""
+Read the conversation history to answer correctly in context:
+{conversation_context}
+
+CRITICAL:
+- Apply the tone and make the message fit the conversation history.
+- Use phrases like "I'll need to escalate your request" or "I'm transferring you to a human agent".
+- Generate a natural, friendly message informing the user that you're escalating/transferring their request to a human agent.
+
+Return ONLY the reply message, nothing else."""
 
         escalation_message = call_litellm(prompt).strip()
         
@@ -475,13 +526,22 @@ Generate a natural, friendly reply that:
 
 Return ONLY the reply message, nothing else."""
 
+    if _is_debugging_enabled():
+        print(f"[DEBUG] include prompt:\n{prompt}\n")
+    
     reply = call_litellm(prompt).strip()
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] include response:\n{reply}\n")
     
     # Add reply to conversation history
     conversation_history.append({
         "role": "assistant",
         "content": reply
     })
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] include result: {reply}\n")
     
     return reply
 

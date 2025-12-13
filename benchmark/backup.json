@@ -204,7 +204,7 @@
       },
       {
         "id": 30,
-        "instruction": "Rental car insurance is not available for residents of Hawaii. When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for: physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler’s control; theft of the vehicle (if unrecovered); loss-of-use charges or administrative fees charged by the rental agency.",
+        "instruction": "When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for: physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler’s control; theft of the vehicle (if unrecovered); loss-of-use charges or administrative fees charged by the rental agency.",
         "input": "Hi, I'm from CA and I'm renting a car in Italy. Can you explain what your rental car coverage includes?",
         "expected_answer": "Sure! Rental car coverage can be added as an optional benefit during plan selection. It reimburses you for physical damage to the rental vehicle caused by collision, vandalism, theft, natural disasters, or events outside your control. It also covers theft of the vehicle if it isn’t recovered, as well as loss-of-use charges or administrative fees from the rental agency.",
         "topic": "Rental car"

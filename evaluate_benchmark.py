@@ -73,23 +73,21 @@ Agent Output:
 
 Evaluate if the agent followed the instruction and provided an answer close enough to the expected one.
 
-Consider:
-- Key information is present
-- Tone and format generally match
-- Critical steps and details are included
-- Minor wording differences are acceptable
-- Exact word-for-word match is NOT required
-- The actual answer CAN contain MORE information than the expected answer - this is acceptable
-- The actual answer CAN provide only the first step(s) in a process - this is ACCEPTABLE as long as the information is correct
-- What matters is that both answers convey the same core logic and information
-
 Critical Rule:
-- Escalating means that the agent need to say that he is escalating, it doesn't matter the exact wording, the main thing is that you can infer from it that the agent is escalating (e.g., "I'll need to escalate it", "I'll escalate this", "I'm escalating your request", "I'm connecting you with a human agent", "I transfer this to a human agent").
-- If tone is different between the expected answer and the agent answer, but the core logic is close enough -> pass it.
-- If the agent answer has more information than the expected answer, but the core logic is close enough -> pass it.
-- If the agent answer has less information than the expected answer, but the core logic is close enough -> pass it.
-- If the agent answer is different from the expected answer, but the core logic is close enough -> pass it.
-- If the agent doesn't follow the instructions entirely, but its close enough to the expected answer -> pass it.
+1. Escalating means that the agent need to say that he is escalating, it doesn't matter the exact wording, the main thing is that you can infer from it that the agent is escalating (e.g., "I'll need to escalate it", "I'll escalate this", "I'm escalating your request", "I'm connecting you with a human agent", "I transfer this to a human agent").
+
+2. When To Pass:
+- If tone is different between the expected answer and the agent answer, but the core logic is close enough.
+- If the agent answer has more information than the expected answer, but the core logic is close enough.
+- If the agent answer has less information than the expected answer, but the core logic is close enough.
+- If the agent answer is different from the expected answer, but the core logic is close enough.
+- If the agent doesn't follow the instructions entirely, but its close enough to the expected answer.
+- If the agent answer doesn't contain a piece of information that is not relevant for example:
+    - the agent answer doesn't contain the international phone number for customers calling from outside US/Canada.
+    - the agent answer doesn't contain information for states that is not relevant for the user state.
+
+3. When To Fail:
+- ONLY if the agent answer is completly different from the expected answer and completly ignore the instruction.
 
 Return your evaluation in YAML format:
 
