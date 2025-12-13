@@ -1,0 +1,26 @@
+[
+  {
+    "id": 13,
+    "instruction": "The policy is emailed to the customer immediately upon purchasing. They can also view the policy in the Faye app. If this is mentioned to them and they say they have not received this, escalate.",
+    "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy in the app or by email. What do I do?",
+    "expected_answer": "Thanks for letting me know. Since the policy is emailed immediately after purchase and should also appear in the app, and you haven’t received it in either place, I’ll escalate this right away so the team can look into it for you.",
+    "topic": "Email Issues",
+    "agent_answer": "Thanks for letting me know about this! I can see you've already checked the app and your email, which is really helpful. Since you have a confirmation on the website but haven't received your policy documents through either channel, I'll need to escalate your request to one of our human agents who can look into your account directly and get this sorted out for you.\n\nA team member will be with you shortly to help track down your policy and make sure you get everything you need. Thanks for your patience! 😊"
+  },
+  {
+    "id": 17,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi Im from AL there is a bug in the website I get a 404. can you fix it?",
+    "expected_answer": "Thanks for letting me know about the issue. First, what browser you're using to access the website?",
+    "topic": "Web Support",
+    "agent_answer": "Which browser are you using when you encounter the 404 error? (e.g., Chrome, Firefox, Safari, Edge, etc.)"
+  },
+  {
+    "id": 19,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome and my wifi works great on other sites. can you fix it?",
+    "expected_answer": "Thanks for confirming you’re using Chrome and that your Wi-Fi connection is working well. Since the issue is still happening after those checks, I’ll escalate this case to a support agent so they can investigate and help resolve it.",
+    "topic": "Web Support",
+    "agent_answer": ""
+  }
+]

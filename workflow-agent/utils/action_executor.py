@@ -9,6 +9,11 @@ from utils.litellm_configuration import call_litellm
 # This file contains the functions to execute the different actions in the workflow- Fetch, Conditional, Reply, Use Tool, Include
 
 
+def _is_debugging_enabled():
+    """Check if DEBUGGING_MODE is enabled from environment variables."""
+    return os.environ.get("DEBUGGING_MODE", "").lower() in ("true", "1", "yes")
+
+
 def execute_fetch(step: Dict[str, Any], conversation_history: List[Dict[str, str]]) -> Dict[str, Any]:
     field_name = step.get('field', '')
     
@@ -31,10 +36,10 @@ TASK:
 4. Normalize the user's meaning into the most appropriate value for this field — the wording does not need to match exactly.
 
 EXAMPLES OF INFERENCE:
-- “I sent the package yesterday.” → They have a tracking number or proof of shipment.
-- “I’ll reboot the server.” → They have admin access to that server.
-- “I’ll check the security camera.” → They have a camera system installed.
-- “The landlord raised the price again.” → They’re renting (not owning).
+- "I sent the package yesterday." → They have a tracking number or proof of shipment.
+- "I'll reboot the server." → They have admin access to that server.
+- "I'll check the security camera." → They have a camera system installed.
+- "The landlord raised the price again." → They're renting (not owning).
 - "I'm not been able to enter the YouTube app, and the rest of my apps work fine." → They have a problem with the YouTube app and its not a WIFI or hardware issue, because the rest work well.
 
 
@@ -49,7 +54,13 @@ value: <extracted value if found>
 question: <question to ask if not found>
 ```"""
 
+    if _is_debugging_enabled():
+        print(f"[DEBUG] fetch prompt:\n{prompt}\n")
+    
     response = call_litellm(prompt)
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] fetch response:\n{response}\n")
     
     # Parse YAML response
     try:
@@ -73,12 +84,15 @@ question: <question to ask if not found>
                 "content": question
             })
         
-        return {
+        result_dict = {
             "field_name": field_name,
             "found": found,
             "value": value,
             "question": question
         }
+        if _is_debugging_enabled():
+            print(f"[DEBUG] fetch result: {result_dict}\n")
+        return result_dict
     except Exception as e:
         print(f"error parsing fetch response: {e}")
         # Fallback: ask for the field
@@ -188,7 +202,13 @@ question: <question to ask if not found>
 condition_result: <true/false if found, null if not found>
 ```"""
 
+    if _is_debugging_enabled():
+        print(f"[DEBUG] fetch_with_condition prompt:\n{prompt}\n")
+    
     response = call_litellm(prompt)
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] fetch_with_condition response:\n{response}\n")
     
     # Parse YAML response
     try:
@@ -219,13 +239,16 @@ condition_result: <true/false if found, null if not found>
                 "content": question
             })
         
-        return {
+        result_dict = {
             "field_name": field_name,
             "found": found,
             "value": value,
             "question": question,
             "condition_result": condition_result
         }
+        if _is_debugging_enabled():
+            print(f"[DEBUG] fetch_with_condition result: {result_dict}\n")
+        return result_dict
     except Exception as e:
         print(f"error parsing fetch_with_condition response: {e}")
         # Fallback: ask for the field
@@ -302,11 +325,20 @@ CRITICAL: Use your intelligence to determine if the condition is true or false, 
 
 Evaluate the condition and return ONLY "true" or "false" (lowercase, no quotes, no explanation)."""
 
-    print(f"[DEBUG] condition prompt:\n{prompt}\n")
+    if _is_debugging_enabled():
+        print(f"[DEBUG] condition prompt:\n{prompt}\n")
     
     response = call_litellm(prompt).strip().lower()
     
-    return response == "true"
+    if _is_debugging_enabled():
+        print(f"[DEBUG] condition response: {response}\n")
+    
+    result = response == "true"
+    
+    if _is_debugging_enabled():
+        print(f"[DEBUG] condition result: {result}\n")
+    
+    return result
 
 
 def execute_reply(step: Dict[str, Any], conversation_history: List[Dict[str, str]], tone_config: Dict[str, Any], extracted_fields: Dict[str, str]) -> str:

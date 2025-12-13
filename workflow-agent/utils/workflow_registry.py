@@ -65,12 +65,44 @@ def get_next_step_id(
 ) -> Optional[str]:
     def _find_step_and_get_next(step_id: str, step_list: List[Dict[str, Any]], 
                                  top_level_steps: List[Dict[str, Any]],
-                                 conditional_step_idx: Optional[int] = None) -> Optional[str]:
+                                 conditional_step_idx: Optional[int] = None,
+                                 condition_result: Optional[bool] = None) -> Optional[str]:
         for idx, step in enumerate(step_list):
             step_step_id = step.get("id")
             
             # Found the current step
             if step_step_id == step_id:
+                # If this step has branches and condition_result is provided, check branches first
+                if condition_result is not None and (step.get("action") == "conditional" or step.get("action") == "fetch_with_condition"):
+                    if condition_result is True:
+                        then_branch = step.get("then")
+                        if then_branch:
+                            # Handle then branch with steps array
+                            if isinstance(then_branch, dict) and "steps" in then_branch:
+                                steps_list = then_branch.get("steps", [])
+                                if len(steps_list) > 0:
+                                    return steps_list[0].get("id")
+                            # Handle then branch as list
+                            elif isinstance(then_branch, list) and len(then_branch) > 0:
+                                return then_branch[0].get("id")
+                            # Handle then branch as single step
+                            elif isinstance(then_branch, dict) and then_branch.get("id"):
+                                return then_branch.get("id")
+                    else:
+                        else_branch = step.get("else")
+                        if else_branch:
+                            # Handle else branch with steps array
+                            if isinstance(else_branch, dict) and "steps" in else_branch:
+                                steps_list = else_branch.get("steps", [])
+                                if len(steps_list) > 0:
+                                    return steps_list[0].get("id")
+                            # Handle else branch as list
+                            elif isinstance(else_branch, list) and len(else_branch) > 0:
+                                return else_branch[0].get("id")
+                            # Handle else branch as single step
+                            elif isinstance(else_branch, dict) and else_branch.get("id"):
+                                return else_branch.get("id")
+                
                 # Check if there's a next step in the same list
                 if idx + 1 < len(step_list):
                     return step_list[idx + 1].get("id")
@@ -81,8 +113,8 @@ def get_next_step_id(
                         return top_level_steps[conditional_step_idx + 1].get("id")
                 return None
             
-            # Check conditional branches
-            if step.get("action") == "conditional":
+            # Check conditional branches (both conditional and fetch_with_condition)
+            if step.get("action") == "conditional" or step.get("action") == "fetch_with_condition":
                 conditional_idx = None
                 # Find this conditional in top-level steps
                 for top_idx, top_step in enumerate(top_level_steps):
@@ -94,7 +126,12 @@ def get_next_step_id(
                 then_branch = step.get("then")
                 if then_branch:
                     if isinstance(then_branch, list):
-                        result = _find_step_and_get_next(step_id, then_branch, top_level_steps, conditional_idx)
+                        result = _find_step_and_get_next(step_id, then_branch, top_level_steps, conditional_idx, condition_result)
+                        if result is not None:
+                            return result
+                    elif isinstance(then_branch, dict) and "steps" in then_branch:
+                        # Handle then branch with steps array
+                        result = _find_step_and_get_next(step_id, then_branch["steps"], top_level_steps, conditional_idx, condition_result)
                         if result is not None:
                             return result
                     elif then_branch.get("id") == step_id:
@@ -107,7 +144,12 @@ def get_next_step_id(
                 else_branch = step.get("else")
                 if else_branch:
                     if isinstance(else_branch, list):
-                        result = _find_step_and_get_next(step_id, else_branch, top_level_steps, conditional_idx)
+                        result = _find_step_and_get_next(step_id, else_branch, top_level_steps, conditional_idx, condition_result)
+                        if result is not None:
+                            return result
+                    elif isinstance(else_branch, dict) and "steps" in else_branch:
+                        # Handle else branch with steps array
+                        result = _find_step_and_get_next(step_id, else_branch["steps"], top_level_steps, conditional_idx, condition_result)
                         if result is not None:
                             return result
                     elif else_branch.get("id") == step_id:
@@ -118,7 +160,7 @@ def get_next_step_id(
             
             # Check nested steps (for steps arrays in branches)
             if "steps" in step:
-                result = _find_step_and_get_next(step_id, step["steps"], top_level_steps, conditional_step_idx)
+                result = _find_step_and_get_next(step_id, step["steps"], top_level_steps, conditional_step_idx, condition_result)
                 if result is not None:
                     return result
         
@@ -161,7 +203,7 @@ def get_next_step_id(
             return None
     
     # For other steps, find them in the structure
-    return _find_step_and_get_next(current_step_id, steps, steps)
+    return _find_step_and_get_next(current_step_id, steps, steps, None, condition_result)
 
 
 def get_first_step_id(steps: List[Dict[str, Any]]) -> Optional[str]:

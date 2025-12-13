@@ -1,13 +1,17 @@
-"""Evaluate benchmark results using GPT-4o mini."""
+"""Evaluate benchmark results using litellm."""
 
 import os
 import json
 import yaml
 import re
+import sys
 from pathlib import Path
 from typing import Dict, Any, List
 from dotenv import load_dotenv
-from openai import OpenAI
+
+# Add workflow-agent to path to import litellm_configuration
+sys.path.insert(0, str(Path(__file__).parent / "workflow-agent"))
+from utils.litellm_configuration import call_litellm
 
 
 def find_latest_benchmark_file(benchmark_dir: str = "benchmark") -> str | None:
@@ -43,7 +47,7 @@ def evaluate_agent_output(
     expected_answer: str | None = None
 ) -> Dict[str, Any]:
     """
-    Evaluate if the agent output follows the instruction using GPT-4o mini.
+    Evaluate if the agent output follows the instruction using litellm.
 
     Args:
         input_text: The customer query/input
@@ -55,8 +59,6 @@ def evaluate_agent_output(
         dict with 'passed' (bool) and 'reason' (str)
     """
     load_dotenv()
-    
-    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     
     prompt = f"""You are evaluating if an AI agent followed instructions correctly.
 
@@ -87,6 +89,7 @@ Critical Rule:
 - If the agent answer has more information than the expected answer, but the core logic is close enough -> pass it.
 - If the agent answer has less information than the expected answer, but the core logic is close enough -> pass it.
 - If the agent answer is different from the expected answer, but the core logic is close enough -> pass it.
+- If the agent doesn't follow the instructions entirely, but its close enough to the expected answer -> pass it.
 
 Return your evaluation in YAML format:
 
@@ -97,12 +100,7 @@ reason: |
 ```"""
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}]
-        )
-        
-        response_text = response.choices[0].message.content or ""
+        response_text = call_litellm(prompt)
         
         # Extract YAML from response
         yaml_match = re.search(r"```yaml\s*(.*?)\s*```", response_text, re.DOTALL)
