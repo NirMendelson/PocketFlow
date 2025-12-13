@@ -9,16 +9,54 @@ from utils.litellm_configuration import call_litellm
 # This file contains the functions to execute the different actions in the workflow- Fetch, Conditional, Reply, Use Tool, Include
 
 
-def execute_fetch(step: Dict[str, Any], conversation_history: List[Dict[str, str]]) -> Dict[str, Any]:
+def execute_fetch(step: Dict[str, Any], conversation_history: List[Dict[str, str]], extracted_fields: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
     field_name = step.get('field', '')
+    condition = step.get('condition', {})
+    
+    if extracted_fields is None:
+        extracted_fields = {}
     
     # Format conversation for LLM
     conv_text = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history])
     
+    # Build condition string if condition exists
+    condition_str = ""
+    if condition:
+        operator = condition.get('operator', '')
+        left = condition.get('left', '')
+        right = condition.get('right', '')
+        field = condition.get('field', '')
+        
+        # Resolve template variables in left and right
+        resolved_left = str(left)
+        for field_name_key, field_val in extracted_fields.items():
+            resolved_left = resolved_left.replace(f"{{{{ {field_name_key} }}}}", str(field_val))
+            resolved_left = resolved_left.replace(f"{{{{{ {field_name_key} }}}}}", str(field_val))
+            right = str(right).replace(f"{{{{ {field_name_key} }}}}", str(field_val))
+            right = str(right).replace(f"{{{{{ {field_name_key} }}}}}", str(field_val))
+        
+        # Build condition string
+        display_field_name = field or field_name
+        condition_str = f"{display_field_name} {operator} {right}"
+    
+    # Build condition evaluation section if condition exists
+    condition_section = ""
+    if condition_str:
+        condition_section = f"""
+
+If you inferred the field from the text, check if this condition stands: {condition_str}
+
+Again, you are an intelligence agent that cares about meaning and not specific wording. Evaluate if this condition is true or false.
+- "California" = "CA" is true
+- "yes" = "yeah" = "I think so" = any phrase with the basic meaning of yes
+- Focus on the semantic meaning, not exact string matching"""
+    
     prompt = f"""You are an intelligence agent. You have great capabilities to read between the lines and infer information. Read the conversation carefully and check if you have the field '{field_name}' in the conversation, or can infer it from the conversation.
 
+{conv_text}
 
 You should infer information whenever possible, even if it is only implied indirectly.
+
 Treat the conversation like a detective: if a human could reasonably infer the answer, you should too.
 
 TASK:
@@ -29,27 +67,23 @@ TASK:
    (2) If not explicit, infer the value from context if a reasonable human would.
    (3) Only if it is neither explicit nor inferable, ask the user for this specific missing information.
 4. Normalize the user's meaning into the most appropriate value for this field — the wording does not need to match exactly.
-
-EXAMPLES OF INFERENCE:
-- “I sent the package yesterday.” → They have a tracking number or proof of shipment.
-- “I’ll reboot the server.” → They have admin access to that server.
-- “I’ll check the security camera.” → They have a camera system installed.
-- “The landlord raised the price again.” → They’re renting (not owning).
-- "I'm not been able to enter the YouTube app, and the rest of my apps work fine." → They have a problem with the YouTube app and its not a WIFI or hardware issue, because the rest work well.
-
-
-Conversation:
-{conv_text}
-
+{condition_section}
 
 Respond in this format:
 ```yaml
 found: true/false
 value: <extracted value if found>
 question: <question to ask if not found>
+condition_met: <true/false, only if found is true and condition exists>
 ```"""
 
+    # Log prompt and response for debugging
+    print(f"[DEBUG] fetch prompt for field '{field_name}':\n{prompt}\n")
+    
     response = call_litellm(prompt)
+    
+    # Log full response for debugging
+    print(f"[DEBUG] fetch response for field '{field_name}':\n{response}\n")
     
     # Parse YAML response
     try:
@@ -65,6 +99,7 @@ question: <question to ask if not found>
         found = result.get('found', False) if isinstance(result, dict) else False
         value = result.get('value', '') if isinstance(result, dict) else ''
         question = result.get('question', '') if isinstance(result, dict) else ''
+        condition_met = result.get('condition_met', None) if isinstance(result, dict) else None
         
         if not found and question:
             # Add question to conversation history
@@ -77,7 +112,8 @@ question: <question to ask if not found>
             "field_name": field_name,
             "found": found,
             "value": value,
-            "question": question
+            "question": question,
+            "condition_met": condition_met
         }
     except Exception as e:
         print(f"error parsing fetch response: {e}")
@@ -91,46 +127,11 @@ question: <question to ask if not found>
             "field_name": field_name,
             "found": False,
             "value": "",
-            "question": question
+            "question": question,
+            "condition_met": None
         }
 
 
-def evaluate_condition(condition: Dict[str, Any], conversation_history: List[Dict[str, str]], extracted_fields: Dict[str, str]) -> bool:
-    # Format conversation and fields for LLM
-    conv_text = "\n".join([f"{msg['role']}: {msg['content']}" for msg in conversation_history])
-    fields_text = "\n".join([f"{k}: {v}" for k, v in extracted_fields.items()])
-    
-    # Format condition for LLM
-    operator = condition.get('operator', '')
-    left = condition.get('left', '')
-    right = condition.get('right', '')
-    field = condition.get('field', '')
-    
-    prompt = f"""You are an intelligence agent. You have great capabilities to read between the lines and infer information. Evaluate this condition based on the conversation and extracted fields.
-
-Condition:
-- Operator: {operator}
-- Left: {left}
-- Right: {right}
-- Field: {field}
-
-Conversation:
-{conv_text}
-
-Extracted Fields:
-{fields_text}
-
-TASK: Determine if this condition is true or false based on the available data. Check both memory and conversation history - the user may have mentioned relevant information earlier in the conversation.
-
-CRITICAL: Use your intelligence to determine if the condition is true or false, don't do a simple string comparison.
-- California = CA is true
-- yes = yeah = I think so = any other phrase with basic meaning of yes
-
-Evaluate the condition and return ONLY "true" or "false" (lowercase, no quotes, no explanation)."""
-
-    response = call_litellm(prompt).strip().lower()
-    
-    return response == "true"
 
 
 def execute_reply(step: Dict[str, Any], conversation_history: List[Dict[str, str]], tone_config: Dict[str, Any], extracted_fields: Dict[str, str]) -> str:

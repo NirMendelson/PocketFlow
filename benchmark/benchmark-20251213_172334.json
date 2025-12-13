@@ -4,6 +4,7 @@
     "instruction": "The policy is emailed to the customer immediately upon purchasing. They can also view the policy in the Faye app. If this is mentioned to them and they say they have not received this, escalate.",
     "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy in the app or by email. What do I do?",
     "expected_answer": "Thanks for letting me know. Since the policy is emailed immediately after purchase and should also appear in the app, and you haven’t received it in either place, I’ll escalate this right away so the team can look into it for you.",
-    "topic": "Email Issues"
+    "topic": "Email Issues",
+    "agent_answer": "Have you checked the app for the policy to see if it's listed there?"
   }
 ]

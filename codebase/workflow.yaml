@@ -1004,12 +1004,12 @@ examples:
 steps:
 - id: fetch_app_check
   action: fetch
-  field: app_checked
+  field: did_user_tried_to_check_app
 - id: check_app_status
   action: conditional
   condition:
     operator: equal
-    left: '{{ app_checked }}'
+    left: '{{ did_user_tried_to_check_app }}'
     right: true
   then:
     id: escalate
