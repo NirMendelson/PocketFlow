@@ -22,7 +22,7 @@ def match_workflows(
     fuzzy_threshold: float = 0.6,
     semantic_k: int = 5,
     semantic_min_score: float = 0.35,
-    min_combined_score: float = 0.5,
+    min_combined_score: float = 0.0,
     debug: bool = False
 ) -> Tuple[List[Tuple[str, float]], List[Tuple[str, float]], Optional[Dict[str, Dict[str, Any]]]]:
     # Step 1: Keyword fuzzy matching
@@ -156,7 +156,7 @@ Score all workflows, even if some have low confidence."""
 # For LLM matching: only check gap (no min confidence threshold)
 def meets_selection_criteria(
     scored_workflows: List[Tuple[str, float]],
-    min_confidence_gap: float = 0.05
+    min_confidence_gap: float = 0.0
 ) -> bool:
     if not scored_workflows:
         return False

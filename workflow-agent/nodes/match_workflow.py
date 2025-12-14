@@ -156,8 +156,8 @@ class MatchWorkflowNode(Node):
         user_input = extract_user_input_from_exec(exec_res)
         
         # Check if confidence scores meet selection criteria
-        # For LLM: only check gap (0.05), no min confidence threshold
-        if meets_selection_criteria(scored_workflows, min_confidence_gap=0.05):
+        # For LLM: only check gap (0.0), no min confidence threshold
+        if meets_selection_criteria(scored_workflows, min_confidence_gap=0.0):
             # Criteria met - select top workflow
             workflow_name = scored_workflows[0][0]
             workflow_def = extract_workflow_definition(workflows, workflow_name)

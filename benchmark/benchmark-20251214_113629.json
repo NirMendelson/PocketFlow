@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "instruction": "If a customer inquires about purchasing insurance and states they are not a US resident, do not ask which US state they will visit. Instead, inform them that Faye insurance is only available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+    "input": "Hi, I need help purchasing travel insurance. I’m not a US resident, I’m from Queensland. Can I buy Faye insurance for my trip?",
+    "expected_answer": "Thanks for reaching out! Faye insurance is only available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+    "topic": "Coverage",
+    "agent_answer": "Faye insurance is ONLY available to US residents of all states, except for residents of the following US territories: United States Virgin Islands, Northern Mariana Islands, Guam, American Samoa, and Puerto Rico.",
+    "passed": true,
+    "reason": "The agent's answer is close enough to the expected response. The core logic is consistent with the instruction, as it correctly conveys that Faye insurance is only available to US residents, excluding certain US territories. The slight variation in wording or emphasis (using \"ONLY\") does not detract from the essential message and therefore does not warrant a fail."
+  },
+  {
+    "id": 2,
+    "instruction": "If you identify that any modifications are required to an existing policy, immediately escalate the issue to the appropriate authority or supervisor for review and approval before proceeding with any changes.",
+    "input": "Hi, I'm from NY. I bought a policy and noticed there's a typo in my last name. I need you to change it.",
+    "expected_answer": "Thanks for letting me know! Since this involves a modification to an existing policy, I’ll need to escalate your request to the appropriate authority for review and approval before any changes can be made. I’ll pass this along right away.",
+    "topic": "Coverage",
+    "agent_answer": "Hi there! I understand how important it is to have your details correct on your policy, and I’m here to help you get this sorted out. 😊 To ensure your request is handled correctly, I'll need to escalate this to a human agent who can review and approve the modification to your last name. Please hold on for just a moment while I make this transfer. Thank you for your patience!",
+    "passed": true,
+    "reason": "The agent's response indicates that it is escalating the request to a human agent for review and approval, aligning with the core logic of the instruction. The wording is slightly different, but the main action of escalation is clear, and the addition of more information with a friendly tone does not detract from the core instruction. The escalation process is accurately represented, meeting the critical rule for passing."
+  },
+  {
+    "id": 3,
+    "instruction": "If a customer continues to experience issues with any part of the quoting process after receiving one troubleshooting message, immediately escalate the issue to the appropriate support team.",
+    "input": "Hi, I'm from MO. Your quote link is broken, and the troubleshooting you sent me doesn't work. What do I do?",
+    "expected_answer": "I'm sorry you're still having trouble with the quote process. Since the issue persists after troubleshooting, I'll escalate this to our support team right away so they can assist you further.",
+    "topic": "Coverage",
+    "agent_answer": "Hello!\n\nI’m really sorry to hear that you’re still having issues with the quote link. I completely understand how frustrating this must be for you. Let's get this resolved quickly!\n\nSince you’ve already tried the troubleshooting steps and it didn’t work, I’ll need to escalate your request to one of our experienced human agents who can take a closer look and help you with this. They’ll provide the support you need to get everything sorted out.\n\nThank you for your patience, and we appreciate your understanding 🛠️ A specialist will be with you shortly to assist further!",
+    "passed": true,
+    "reason": "The agent followed the instruction to escalate the issue after troubleshooting was unsuccessful. The statement \"I’ll need to escalate your request to one of our experienced human agents\" clearly indicates that the issue is being escalated, which aligns with the instruction's requirement. The tone and additional information provided by the agent do not detract from the core logic expected in the answer. The response is close enough to the expected answer in terms of intent and action taken."
+  },
+  {
+    "id": 4,
+    "instruction": "If you determine that travelers reside in different states, always inform them that all travelers must live in the same state to purchase a policy together. Advise them that if they live in different states, they must purchase separate policies, even if their question was about a different topic.",
+    "input": "Hi, I'm from CA. I want to buy coverage for my family trip. We are 4 — I'm Bobby Lee and my wife Andrew Santino are flying from CA to Mexico, and our daughter Rudy Jules is flying from Texas. We fly from 25/12/25 to 25/01/26. How much would it cost?",
+    "expected_answer": "Thanks for reaching out! Since some travelers live in different states, you won’t be able to purchase a single policy together. All travelers must reside in the same state to be on one policy. Because your daughter lives in Texas while you and your wife live in California, you’ll need to purchase separate policies for each state. I’m happy to help guide you through each one.",
+    "topic": "Coverage",
+    "agent_answer": "All travelers must live in the same state to purchase a policy together. If you live in different states, you must purchase separate policies.",
+    "passed": true,
+    "reason": "The agent's answer follows the instruction's main point: travelers residing in different states must purchase separate policies. Though less detailed, the core logic aligns with the expected answer, informing the travelers about the necessity of living in the same state for a joint policy. It doesn't ignore the instruction entirely."
+  },
+  {
+    "id": 5,
+    "instruction": "When a customer asks about travel to a U.S. Department of State Level 4 (\"Do Not Travel\") destination, state that coverage is unavailable and do not list any benefits. This applies regardless of state of residence.",
+    "input": "Hi, I'm from TX. I want to visit my family in Afghanistan. I believe it's a Level 4 country. How much will it cost? Will it cost extra because of it?",
+    "expected_answer": "Thanks for reaching out. Coverage is unavailable for travel to any U.S. Department of State Level 4 (“Do Not Travel”) destination, including Afghanistan. We’re unable to offer a policy for this trip.",
+    "topic": "Coverage",
+    "agent_answer": "Coverage is unavailable for travel to this destination.",
+    "passed": true,
+    "reason": "The agent's answer is close enough to the expected answer. Although it is less detailed, it aligns with the core instruction by stating that coverage is unavailable for travel to the destination in question. The instruction to avoid mentioning benefits was followed, and the response did not contradict the guideline provided. Since the core logic is maintained, the response is considered acceptable."
+  },
+  {
+    "id": 6,
+    "instruction": "If the customer is from Washington (WA) or Missouri (MO), inform them that the Adventure Sports add-on is not available in their state.",
+    "input": "Hi, I'm from Washington, and I want to do extreme white-water rafting in Skykomish. How much for adding this coverage?",
+    "expected_answer": "Thanks for reaching out! The Adventure Sports add-on is not available for residents of Washington, so unfortunately it can’t be added to your policy.",
+    "topic": "Extreme Activities and Adventure Sports",
+    "agent_answer": "I'm sorry, but the Adventure Sports add-on is not available in your state.",
+    "passed": true,
+    "reason": "The agent's output is close enough to the expected answer. While it does not specify Washington (WA) or Missouri (MO), it follows the core logic of informing the customer that the Adventure Sports add-on is not available in their state. It adheres to the instruction close enough as it conveys the unavailability of the add-on."
+  },
+  {
+    "id": 7,
+    "instruction": "Currently, Faye does not offer an annual plan as we've determined that we can provide the most value with coverage for individual trips.",
+    "input": "Hi, I'm from CA. Look, I fly a lot and it's really frustrating to buy a coverage policy each time. Can you do an annual plan for me?",
+    "expected_answer": "I hear you — frequent travel can make this process feel repetitive. At the moment, Faye does not offer an annual plan, as we’ve found we can provide the most value through coverage for individual trips. I'm happy to help you with a new trip policy anytime you need one.",
+    "topic": "Annual policy",
+    "agent_answer": "Currently, we do not offer an annual plan as we've determined that we can provide the most value with coverage for individual trips. If you'd like to get a quote on an upcoming trip, just head here: www.withfaye.com/quote/destination.",
+    "passed": true,
+    "reason": "The agent's answer is close to the expected answer and follows the instruction to convey the essential information that Faye does not offer an annual plan. Although the wording and additional details differ slightly, the core logic of providing value through individual trip coverage is consistent with the expected answer. The agent provides more information by offering a link for a trip quote, which aligns with the instruction's focus on individual trips without contradicting it."
+  },
+  {
+    "id": 8,
+    "instruction": "When responding to a customer who has lost their mobile phone, express genuine empathy by acknowledging their frustration and concern. Use a warm and understanding tone, and offer reassurance that you are there to help them through the process of resolving the issue.",
+    "input": "Hi, I'm from FL and I just lost my mobile phone while traveling. I'm really stressed — what should I do?",
+    "expected_answer": "I’m so sorry to hear that you lost your phone — that’s incredibly frustrating, especially while traveling. I’m here to help you through this. Let’s work together to figure out the next steps so you can get this resolved as quickly as possible.",
+    "topic": "Claims",
+    "agent_answer": "I'm so sorry to hear that you've lost your mobile phone. I can only imagine how frustrating and concerning this must be for you right now. Please know that I'm here to help you through this process and we'll work together to resolve this issue. What would you like to do next?",
+    "passed": true,
+    "reason": "The agent's response closely follows the instruction by acknowledging the loss with genuine empathy and a warm, understanding tone. It addresses the customer's frustration and concern, reassures them of help through the resolution process, and invites the customer to collaborate on the next steps. This aligns well with the expected answer and does not go against the instruction."
+  },
+  {
+    "id": 9,
+    "instruction": "If a customer is asking for an update or status of a claim that has already been filed, they can see the status of the claim in the Faye app, or email the claims team at claims@withfaye.com.",
+    "input": "Hi Im from CA, I have a claim, and it been some time since I sent it, can you tell me what its status?",
+    "expected_answer": "Thanks for reaching out! You can check the status of your claim directly in the Faye app. If you’d like more details or have specific questions, you can also email our claims team at claims@withfaye.com.",
+    "topic": "Claims",
+    "agent_answer": "You can check the status of your claim in the Faye app, or email the claims team directly at claims@withfaye.com for an update.",
+    "passed": true,
+    "reason": "The agent's response closely follows the instruction by indicating two ways the customer can check the status of their claim: through the Faye app or by emailing the claims team at claims@withfaye.com. Despite lacking the friendly tone of the expected answer, the core logic and options for the customer are accurately conveyed. There is no indication of escalation, which is not required as per the instruction. Therefore, the agent's answer is close enough to the expected one to pass."
+  },
+  {
+    "id": 10,
+    "instruction": "If a person does not want to download the app or wants to view the claim/send info about the claim on their computer, they can send an email to claims@withfaye.com.",
+    "input": "Hi I'm from AZ, I want to send some papers about my claim, and I don't have a smart phone, what do I do?",
+    "expected_answer": "No worries at all — if you don’t have a smartphone, you can still manage your claim. You can email any documents or information directly to our claims team at claims@withfaye.com, and they’ll take care of it for you.",
+    "topic": "Claims",
+    "agent_answer": "You can file a claim using the Faye app or by sending an email to claims@withfaye.com.",
+    "passed": true,
+    "reason": "The agent's output provides the essential information that users can manage their claim by sending an email to claims@withfaye.com. While it briefly mentions another option (using the Faye app), the core logic of directing users to email for managing claims without a smartphone is captured. Therefore, it is close enough to the expected answer to pass."
+  },
+  {
+    "id": 11,
+    "instruction": "When a customer asks about how to file a claim or the claim process, instruct them to file a claim using the Faye app or by sending an email to claims@withfaye.com.",
+    "input": "Hi, I'm from NY. My luggage was lost on my last trip and I want to file a claim. How do I start the claim process?",
+    "expected_answer": "I’m sorry to hear about your lost luggage. To file a claim or follow the claim process, you can submit it directly through the Faye app, or send an email with your details and any supporting documents to claims@withfaye.com.",
+    "topic": "Claims",
+    "agent_answer": "You can file a claim using the Faye app or by sending an email to claims@withfaye.com.",
+    "passed": true,
+    "reason": "The agent's response follows the core logic of the instruction given. Both the expected answer and the agent's output provide the same primary instructions on how to file a claim: using the Faye app or sending an email to claims@withfaye.com. Although the expected answer contains more details and empathetic tone, the agent's answer captures the essential elements and does not go against the instruction."
+  },
+  {
+    "id": 12,
+    "instruction": "ALWAYS share the link https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/ when discussing covered reasons for trip cancellation with customers.",
+    "input": "Hi, I'm from GA. I'm thinking of canceling my upcoming trip because of a family emergency. What are the covered reasons for trip cancellation?",
+    "expected_answer": "I’m sorry to hear you're dealing with a family emergency. You can review all covered reasons for trip cancellation here: https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/. This page explains when you may be eligible for reimbursement.",
+    "topic": "Claims",
+    "agent_answer": "Hi there! 🌟 I'm genuinely sorry to hear about your family emergency—dealing with unexpected events can certainly be stressful. Regarding trip cancellations, different policies cover various reasons, so it’s essential to know what your specific plan includes. You can find detailed information about covered reasons for trip cancellation on this resource: [Covered Reasons for Trip Cancellation](https://blog.withfaye.com/travel-insurance-101/covered-reasons-for-trip-cancellation/). If you have any more questions or need further assistance, feel free to ask, and I'll be here to help!",
+    "passed": true,
+    "reason": "The agent followed the instruction by including the correct link to the blog post about covered reasons for trip cancellation. Although the agent used a slightly more conversational tone and provided additional context regarding the variability of policies, the core logic closely aligns with the expected answer. The agent correctly directed the customer to the resource containing the necessary information, which meets the instruction's requirement."
+  },
+  {
+    "id": 13,
+    "instruction": "The policy is emailed to the customer immediately upon purchasing. They can also view the policy in the Faye app. If this is mentioned to them and they say they have not received this, escalate.",
+    "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy, not in the app, and not by email. What do I do?",
+    "expected_answer": "Thanks for letting me know. Since the policy is emailed immediately after purchase and should also appear in the app, and you haven’t received it in either place, I’ll escalate this right away so the team can look into it for you.",
+    "topic": "Email Issues",
+    "agent_answer": "Hi there! 😊 Thank you for reaching out, and I completely understand how important it is for you to receive your policy documents. Since you've confirmed the purchase but haven't received the policy via email or in the app, I'll need to escalate your request to one of our human agents. They'll be able to review your situation more closely and make sure you receive the information you need.\n\nPlease rest assured that we're here to assist you every step of the way, and you'll hear from a team member shortly. In the meantime, if you have any other questions, feel free to let me know. 🏠🔍",
+    "passed": true,
+    "reason": "The agent's response indicates that they are escalating the request by saying \"I'll need to escalate your request to one of our human agents.\" This matches the critical rule of escalation, even though the wording is slightly different from the expected answer. The agent acknowledges the issue of not receiving the policy and takes appropriate action by mentioning escalation. Despite additional reassurance and a friendly tone, the core logic aligns with the expected answer, thus meeting the criteria to pass."
+  },
+  {
+    "id": 14,
+    "instruction": "When customers reach out asking Faye's contact information.\n\nCustomers can always chat with us in the Faye app, email us at support@withfaye.com or call us at 1-833-240-7056 (US/Canada). From all other locations, call us at 1-804-482-2122. We're available 24/7.",
+    "input": "Hi, I'm from CO. Can you give me Faye’s contact information?",
+    "expected_answer": "Of course! You can always chat with us directly in the Faye app, email us at support@withfaye.com, or call us at 1-833-240-7056 from the US or Canada. If you're traveling internationally, you can reach us at 1-804-482-2122. We're available 24/7 and here to help.",
+    "topic": "Contact details",
+    "agent_answer": "Here are the ways to reach our customer support team:\n\n- **Chat with us in the Faye app**\n\n- **Email:** support@withfaye.com\n\n- **Phone (US/Canada):** +1 833-240-7056\n\n- **Phone (all other locations):** +1 804-482-2122\n\nWe're available 24/7. 😊\n\nI can also transfer you to a live agent right now if you'd like to speak with someone directly. Would you like me to do that?",
+    "passed": true,
+    "reason": "The agent's answer is close enough to the expected answer. It provides the required contact information for Faye's customer support, including chat options, email, and both domestic and international phone numbers. The core logic of providing contact methods and confirming 24/7 availability is preserved. Additionally, offering to transfer the customer to a live agent can be seen as an additional helpful option, and it aligns with the escalation rule. Despite slight variations in wording and presentation, the agent's response adheres to the instruction and covers the essential elements that the expected answer contains."
+  },
+  {
+    "id": 15,
+    "instruction": "Customers experiencing a medical situation while traveling may visit any doctor or medical facility of their choice. There is no requirement to use in-network or affiliated providers; all licensed medical professionals and facilities are acceptable.",
+    "input": "Hi, I'm from MT. If I will feel sick while traveling, do I need to go to a specific clinic that works with you, or can I see any doctor?",
+    "expected_answer": "If you ever feel sick while traveling, you can visit any doctor or medical facility of your choice. There’s no requirement to use an in-network or affiliated provider — any licensed medical professional or facility is perfectly acceptable.",
+    "topic": "General questions",
+    "agent_answer": "Customers experiencing a medical situation while traveling may visit any doctor or medical facility of their choice. There is no requirement to use in-network or affiliated providers; all licensed medical professionals and facilities are acceptable.",
+    "passed": true,
+    "reason": "The agent's output is essentially identical to the expected answer and closely follows the given instruction. The tone and wording are aligned, and the core logic of allowing customers to visit any doctor or medical facility of their choice without restrictions is conveyed accurately. There is no deviation from the instruction that would warrant a failure."
+  },
+  {
+    "id": 16,
+    "instruction": "If someone would like to print the policy, they can do so from the PDF that is emailed immediately after purchase.",
+    "input": "Hi, I'm from OR. I want to print my policy — how can I do that?",
+    "expected_answer": "You can print your policy from the PDF that’s emailed to you immediately after purchase. Just open the PDF from your email and print it whenever you need.",
+    "topic": "General questions",
+    "agent_answer": "You can print the policy from the PDF that is emailed immediately after purchase.",
+    "passed": true,
+    "reason": "The agent's output provides the core logic required by the instruction, which is that the policy can be printed from the PDF emailed immediately after purchase. While it is slightly less detailed than the expected answer, it does not go against the instruction and conveys the necessary information adequately."
+  },
+  {
+    "id": 17,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) check if the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi Im from AL there is a bug in the website I get a 404. can you fix it?",
+    "expected_answer": "Thanks for letting me know about the issue. First, what browser you're using to access the website?",
+    "topic": "Web Support",
+    "agent_answer": "Could you let me know which browser you're using to access the website?",
+    "passed": true,
+    "reason": "The agent's response is close enough to the expected answer. Both the expected answer and the agent's output involve asking the user which browser they are using, which aligns with the first step in the instructions. The difference in tone does not impact the core logic, making it close enough to the expected answer."
+  },
+  {
+    "id": 18,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome. can you fix it?",
+    "expected_answer": "Thanks for the details and for confirming you’re using Chrome. Next, can you please check that you have a strong and stable Wi-Fi connection, and then try again?",
+    "topic": "Web Support",
+    "agent_answer": "Is your WiFi working properly?",
+    "passed": false,
+    "reason": "The agent output does not adequately follow the instructions. It only addresses the Wi-Fi connection without confirming the use of Google Chrome first, as per the instructions. Additionally, it does not indicate any escalation process, which is a critical part of the instructions for cases where the error persists. Therefore, the answer diverges significantly from the expected one, failing to cover essential steps outlined in the instructions."
+  },
+  {
+    "id": 19,
+    "instruction": "When a user reports a 'something went wrong' error with a quote or bug, follow these steps: 1) Confirm the user is using the Google Chrome browser. 2) Ensure the user has a strong Wi-Fi connection. 3) If the issue persists after these checks, escalate the case to a support agent.",
+    "input": "Hi im from georgia there is a bug in the website I get a 404 on my chrome and my wifi works great on other sites. can you fix it?",
+    "expected_answer": "Thanks for confirming you’re using Chrome and that your Wi-Fi connection is working well. Since the issue is still happening after those checks, I’ll escalate this case to a support agent so they can investigate and help resolve it.",
+    "topic": "Web Support",
+    "agent_answer": "Hello there from Georgia! 😊\n\nI'm really sorry to hear that you're experiencing difficulties with the quoting process on our website. You’ve done wonderfully in confirming a strong Wi-Fi connection and ensuring everything is set up correctly on Chrome, so I appreciate your effort.\n\nTo ensure we get this resolved swiftly and thoroughly, I'll need to escalate your request to one of our human agents. They'll be able to provide the expertise needed to get things back on track. Please rest assured that we're here to assist you every step of the way.\n\nThank you for your patience and understanding! 🌟",
+    "passed": true,
+    "reason": "The agent's response closely follows the instruction and the core logic of the expected answer. It confirms the user's use of Google Chrome and their strong Wi-Fi connection, and it states the intent to escalate the issue to a human agent, which meets the critical requirement. Although the agent's tone is more conversational and includes additional phrases, these do not detract from the compliance with the instruction. The escalation process is clear, and thus, the answer passes."
+  },
+  {
+    "id": 20,
+    "instruction": "When customers inquire about partnerships or product integrations, direct them to the partnership business development team by providing the email address partnerships@withfaye.com. Inform them that the team will respond if the inquiry is relevant.",
+    "input": "Hi, I'm from CA. I run a travel booking platform and I’d like to explore integrating Faye into our product. Who should I talk to?",
+    "expected_answer": "Thanks for reaching out and for your interest in partnering with Faye. For partnership and product integration inquiries, please contact our partnership business development team at partnerships@withfaye.com. They review all inquiries and will get back to you if it’s relevant.",
+    "topic": "Web Support",
+    "agent_answer": "For partnership or product integration inquiries, please contact our partnership business development team at partnerships@withfaye.com. The team will respond if your inquiry is relevant.",
+    "passed": true,
+    "reason": "The agent followed the instruction closely by redirecting the inquiry to the partnership business development team and providing the correct email address. While the agent's response is slightly more concise than the expected answer, the core logic remains intact. The inquiry is directed to the right team, and the agent informs that the team will respond if the inquiry is relevant, adhering to the instruction's main requirement. There is no indication of escalation needed in this context, and the differences do not warrant a failure."
+  },
+  {
+    "id": 21,
+    "instruction": "If they want to see the policy (a copy of the policy/a sample policy/the full policy or some such wording) they can be directed to https://www.withfaye.com/coverage/ and scroll down to the bottom of the page to find all of our policies linked.",
+    "input": "Hi, I'm from VA. Before I buy, can I see a sample policy or the full policy document?",
+    "expected_answer": "Absolutely! You can view the policy by visiting https://www.withfaye.com/coverage/ and scrolling to the bottom of the page, where all of our policies are linked.",
+    "topic": "Customer Purchases",
+    "agent_answer": "You can view all of our policies by visiting https://www.withfaye.com/coverage/ and scrolling down to the bottom of the page, where you'll find all of our policies linked.",
+    "passed": true,
+    "reason": "The agent's answer is close enough to the expected answer. The core logic of both responses is consistent, directing the user to visit the specified URL and scroll down to the bottom of the page to find all the policies linked. While the wording is slightly different, the instructions are adequately followed, meeting the criteria for passing as outlined in the evaluation guidelines."
+  },
+  {
+    "id": 22,
+    "instruction": "Payments can be done on the website using any credit card, Paypal, or Apple Wallet/Google Pay. We cannot split up the payment to multiple payments/cards.",
+    "input": "Hi, I'm from SC. I want to buy a policy but I’d like to split the payment between two different credit cards. Can you do that?",
+    "expected_answer": "Thanks for checking! Payments can be made on our website using any credit card, PayPal, or Apple Wallet/Google Pay. However, we aren’t able to split a single purchase across multiple payments or cards.",
+    "topic": "Customer Purchases",
+    "agent_answer": "Payments can be done on the website using any credit card, PayPal, or Apple Wallet/Google Pay. We cannot split up the payment to multiple payments or cards.",
+    "passed": true,
+    "reason": "The agent's response closely aligns with the expected answer and follows the given instructions. The core message about the payment options being available via credit card, PayPal, or Apple Wallet/Google Pay, and the inability to split payments across multiple methods, is retained. While the phrasing may differ slightly, the fundamental information is correct and consistent with what was expected."
+  },
+  {
+    "id": 23,
+    "instruction": "If a customer asks about an existing policy or receipt, escalate the inquiry immediately without asking any follow-up questions.",
+    "input": "Hi I'm from UT, I have policy number 43198791 and I think I got charged more than I should. Please tell me what went wrong.",
+    "expected_answer": "Thanks for reaching out. Since this involves an existing policy and billing, I’ll escalate your inquiry right away so the appropriate team can review it for you.",
+    "topic": "Customer Purchases",
+    "agent_answer": "Hello there! Thanks for reaching out and sharing your concerns with your policy. 😊\n\nIt looks like you’re an existing policyholder, and to ensure we address this accurately, I’ll need to escalate your request to one of our human agents who can provide a detailed review and approval. They're the best at handling these types of inquiries, and we're committed to getting this sorted out for you.\n\nYour patience is greatly appreciated, and you can expect a response shortly from someone who can assist you further. Thank you for choosing to let us help resolve this situation.",
+    "passed": true,
+    "reason": "The agent's response is close enough to the expected answer. It conveys the idea that the inquiry is being escalated to a human agent who can provide a detailed review, which matches the instruction to escalate immediately. While the tone is slightly more conversational and empathetic, and there's additional information about commitment to resolving the issue, the core logic aligns with the purpose of escalation. The response does not include irrelevant details, and it follows the instruction sufficiently."
+  },
+  {
+    "id": 24,
+    "instruction": "Baggage and Personal Effects coverage provides reimbursement for personal items lost, stolen, damaged, or destroyed during a covered trip, including while items are checked with a common carrier. The coverage may also include reimbursement for passport, visa, or credit card replacement, and baggage delay purchases if baggage is delayed for 12+ hours.",
+    "input": "Hi, I'm from NC. Can you explain what the Baggage and Personal Effects coverage includes?",
+    "expected_answer": "Sure! Baggage and Personal Effects coverage provides reimbursement for personal items that are lost, stolen, damaged, or destroyed during a covered trip — including when they’re checked with a common carrier. It may also cover reimbursement for replacing a passport, visa, or credit card, as well as purchases made if your baggage is delayed for 12 hours or more.",
+    "topic": "Baggage and Personal Items Coverage",
+    "agent_answer": "Baggage and Personal Effects coverage provides reimbursement for personal items lost, stolen, damaged, or destroyed during a covered trip, including while items are checked with a common carrier. The coverage may also include reimbursement for passport, visa, or credit card replacement, and baggage delay purchases if baggage is delayed for 12+ hours.",
+    "passed": true,
+    "reason": "The agent’s output closely matches the expected answer and adheres to the provided instruction. Both the agent's response and the expected answer explain that the coverage reimburses for personal items that are lost, stolen, damaged, or destroyed during a covered trip, including when checked with a common carrier. They also mention coverage for passport, visa, or credit card replacement, and baggage delay purchases if delayed for 12+ hours. Thus, the core logic is maintained, and the output is close enough to the expected answer."
+  },
+  {
+    "id": 25,
+    "instruction": "When answering questions about the government shutdown, clearly state that the policy does not cover incidents related to the shutdown if the event was known at the time of purchase. For policies purchased after October 1, incidents related to the government shutdown are not covered, as the shutdown became a known event on October 1.",
+    "input": "Hi, I'm from CO. I'm worried the government shutdown might delay my trip. If I buy a policy now, will I be covered for issues caused by the shutdown?",
+    "expected_answer": "Thanks for reaching out. The government shutdown became a known event on October 1, so any policies purchased after that date do not provide coverage for incidents related to the shutdown. Because it’s already a known event, issues caused by it would not be covered.",
+    "topic": "Trip Delay",
+    "agent_answer": "All policy coverages apply to unknown events. Since the government shutdown became a known event on October 1, policies purchased after this date may not be covered for incidents related to the government shutdown.\n\nIf you have further questions about how this affects your specific policy, I'm happy to help clarify.",
+    "passed": true,
+    "reason": "The agent's answer follows the core logic of the instruction. It correctly states that policies purchased after October 1 do not provide coverage for incidents related to the government shutdown due to it being a known event. While the wording is slightly different and less detailed than the expected answer, the essential message aligns with the instruction. The agent briefly adds an offer for further clarification, which does not detract from the adherence to the instruction."
+  },
+  {
+    "id": 26,
+    "instruction": "You cannot extend your coverage once your trip has started. Faye travel insurance must be purchased prior to your trip, up until departure. Additionally, you cannot purchase a second plan on trip once the first plan ends to extend coverage, all policies must be purchased prior to the start of the trip.",
+    "input": "Hi, I'm from CA. My trip already started but I want to extend my coverage by a few more days. Can you extend my current plan?",
+    "expected_answer": "Thanks for reaching out. Coverage cannot be extended once your trip has already started. Faye travel insurance must be purchased before your trip begins, up until departure.",
+    "topic": "Policy Changes",
+    "agent_answer": "You cannot extend your coverage once your trip has started. Faye travel insurance must be purchased prior to your trip, up until departure. Additionally, you cannot purchase a second plan on trip once the first plan ends to extend coverage. All policies must be purchased prior to the start of the trip.",
+    "passed": true,
+    "reason": "The agent's output closely mirrors the expected answer and follows the instructions provided. Although the format of the response is slightly different, the core logic and details about purchasing and extending Faye travel insurance are accurately preserved. This aligns with the criteria for passing as the core message is conveyed correctly."
+  },
+  {
+    "id": 27,
+    "instruction": "You cannot extend your coverage once your trip has started. Faye travel insurance must be purchased prior to your trip, up until departure. Additionally, you cannot purchase a second plan on trip once the first plan ends to extend coverage, all policies must be purchased prior to the start of the trip.",
+    "input": "Hi, I'm from NV. My policy ends tomorrow but I’m still traveling. Can I buy another plan right now to keep myself covered for a few more days?",
+    "expected_answer": "Thanks for checking in. You can’t purchase a second plan to extend coverage once your trip has already begun. All policies must be purchased before the start of your trip, so we’re unable to extend or restart coverage mid-trip.",
+    "topic": "Policy Changes",
+    "agent_answer": "You cannot extend your coverage once your trip has started. Faye travel insurance must be purchased prior to your trip, up until departure. Additionally, you cannot purchase a second plan on trip once the first plan ends to extend coverage. All policies must be purchased prior to the start of the trip.",
+    "passed": true,
+    "reason": "The agent's answer, while slightly different in wording, captures the core logic of the instructions accurately. The key point is that coverage cannot be extended or restarted once the trip has started, and that all policies must be purchased before departure. Even though the tone and phrasing differ, the information communicated aligns closely with the expected answer, thus fulfilling the critical criteria for passing."
+  },
+  {
+    "id": 28,
+    "instruction": "If you have CFAR, you can only increase the trip cost if you do so within 14 days of purchasing the travel arrangement that you are adding the cost of (or 15 days if you live in AZ, NC, NJ, WI).",
+    "input": "Hi, I'm from NJ. I bought my flights three weeks ago and I have CFAR. Can I increase my trip cost to include a new hotel I booked?",
+    "expected_answer": "Thanks for reaching out! Since you live in NJ, you can increase your trip cost within 15 days of purchasing the travel arrangement you're adding. Because your flights were purchased three weeks ago, you’re outside that window, so you wouldn’t be able to increase your trip cost at this point.",
+    "topic": "Policy Changes",
+    "agent_answer": "Thanks for reaching out! Since you live in New Jersey, you can increase your trip cost within 15 days of purchasing the travel arrangement you're adding. Because your travel arrangement was purchased 21 days ago, you're outside that window, so you wouldn't be able to increase your trip cost at this point.",
+    "passed": true,
+    "reason": "The agent's output is close to the expected answer. The core logic remains intact: the individual resides in New Jersey, which allows for a 15-day window to increase trip costs, but their travel arrangement was purchased 21 days ago, putting them outside the allowable window. The wording differs slightly (e.g., \"New Jersey\" vs \"NJ\"), but this does not affect the substantive response. The agent followed the instruction closely enough."
+  },
+  {
+    "id": 29,
+    "instruction": "Rental car insurance is not available for residents of Hawaii. When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for: physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler’s control; theft of the vehicle (if unrecovered); loss-of-use charges or administrative fees charged by the rental agency.",
+    "input": "Hi, I'm from HI and I'm renting a car in Japan. How much does rental car insurance cost if I add it?",
+    "expected_answer": "Thanks for reaching out! Rental car insurance is not available for residents of Hawaii, so it can’t be added to your policy.",
+    "topic": "Rental car",
+    "agent_answer": "Rental car insurance is not available for residents of Hawaii.",
+    "passed": true,
+    "reason": "The agent's output aligns with the core logic of the expected answer, stating that rental car insurance is not available for residents of Hawaii. Although the agent's response is more concise and lacks the tone and additional information provided in the expected answer, it does not contradict the instruction. The critical detail—that rental car insurance cannot be obtained by Hawaii residents—is correctly communicated, allowing this response to pass."
+  },
+  {
+    "id": 30,
+    "instruction": "When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for: physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler’s control; theft of the vehicle (if unrecovered); loss-of-use charges or administrative fees charged by the rental agency.",
+    "input": "Hi, I'm from CA and I'm renting a car in Italy. Can you explain what your rental car coverage includes?",
+    "expected_answer": "Sure! Rental car coverage can be added as an optional benefit during plan selection. It reimburses you for physical damage to the rental vehicle caused by collision, vandalism, theft, natural disasters, or events outside your control. It also covers theft of the vehicle if it isn’t recovered, as well as loss-of-use charges or administrative fees from the rental agency.",
+    "topic": "Rental car",
+    "agent_answer": "When available, rental car coverage must be added as an optional benefit during plan selection. If added, it protects a rental vehicle for the duration of the trip by reimbursing the traveler for:\n\n- Physical damage to the rental car due to collision, vandalism, theft, natural disaster, or events beyond the traveler's control.\n\n- Theft of the vehicle (if unrecovered).\n\n- Loss-of-use charges or administrative fees charged by the rental agency.",
+    "passed": true,
+    "reason": "The agent followed the instruction correctly and provided an answer that closely matches the expected one. The core logic of adding rental car coverage as an optional benefit during plan selection, along with the specific protections it offers, was accurately described. While the tone and presentation may differ slightly, the essential information regarding reimbursement for damages and associated charges is consistent with the expected answer. Therefore, it passes based on the guidelines provided."
+  }
+]

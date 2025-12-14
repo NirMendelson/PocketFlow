@@ -64,7 +64,7 @@
       },
       {
         "id": 10,
-        "instruction": "The Faye app is available only on phones (Apple/Android). If a person does not want to download the app or wants to view the claim/send info about the claim on their computer, they can send an email to claims@withfaye.com.",
+        "instruction": "If a person does not want to download the app or wants to view the claim/send info about the claim on their computer, they can send an email to claims@withfaye.com.",
         "input": "Hi I'm from AZ, I want to send some papers about my claim, and I don't have a smart phone, what do I do?",
         "expected_answer": "No worries at all — if you don’t have a smartphone, you can still manage your claim. You can email any documents or information directly to our claims team at claims@withfaye.com, and they’ll take care of it for you.",
         "topic": "Claims"
@@ -86,7 +86,7 @@
       {
         "id": 13,
         "instruction": "The policy is emailed to the customer immediately upon purchasing. They can also view the policy in the Faye app. If this is mentioned to them and they say they have not received this, escalate.",
-        "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy in the app or by email. What do I do?",
+        "input": "Hi, I'm from NV. I paid for a policy and got a confirmation message on the website, but I never got the policy, not in the app, and not by email. What do I do?",
         "expected_answer": "Thanks for letting me know. Since the policy is emailed immediately after purchase and should also appear in the app, and you haven’t received it in either place, I’ll escalate this right away so the team can look into it for you.",
         "topic": "Email Issues"
       },

@@ -382,7 +382,7 @@ def execute_reply(step: Dict[str, Any], conversation_history: List[Dict[str, str
     # Format conversation history
     conversation_context = chr(10).join([f"{msg['role']}: {msg['content']}" for msg in conversation_history[-3:]])
     
-    prompt = f"""You need to send this reply message: {message_template}
+    prompt = f"""You need to tell the user this reply message: {message_template}
 
 Generate the response using the tone below:
 {tone_text}
@@ -391,7 +391,8 @@ Read the conversation history to answer correctly in context:
 {conversation_context}
 
 CRITICAL:
-- You don't need to write it like reply message word for word, but you must keep all of the information from the reply message.
+- Keep the reply message as is, don't change it.
+- Do not change the reply message, just apply the tone and make the message fit the conversation history.
 - Apply the tone and make the message fit the conversation history. 
 - Don't add information that is not in the reply message.
 - Don't leave out any information that is in the reply message.

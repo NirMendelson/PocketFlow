@@ -60,7 +60,7 @@ def evaluate_agent_output(
     """
     load_dotenv()
     
-    prompt = f"""You are evaluating if an AI agent followed instructions correctly.
+    prompt = f"""You are evaluating if an AI agent followed instructions correctly. You don't care about details, only in the answer is close to the expected one, and doesn't go against the instruction.
 
 Instruction:
 {instruction}
@@ -88,6 +88,8 @@ Critical Rule:
 
 3. When To Fail:
 - ONLY if the agent answer is completly different from the expected answer and completly ignore the instruction.
+
+4. If the agent answer is close but not totally accurate, pass it.
 
 Return your evaluation in YAML format:
 
